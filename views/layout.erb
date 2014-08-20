@@ -22,9 +22,12 @@
     <button class="btn btn-info"><a href="/auth/github">Sign in with GitHub</a></button>
   <% end %>
 
-  <%= styled_flash %>
+  <% if flash.any? %>
+    <div class="alert alert-info">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
 
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </div>
 </body>
 </html>
