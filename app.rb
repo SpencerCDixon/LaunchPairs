@@ -8,6 +8,8 @@ require 'sinatra/flash'
 require 'omniauth-github'
 require 'pg'
 
+set :port, 9000
+
 configure do
   enable :sessions
   set :session_secret, ENV['SESSION_SECRET']
