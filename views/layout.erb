@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Sinatra Omniauth Example</title>
+  <link href="/css/app.css" media="all" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+<% if signed_in? %>
+  <p>
+    You are currently signed in as <%= current_user['email'] %>!
+    <a href="/sign_out">Sign Out</a>
+  </p>
+<% else %>
+  <p><a href="/auth/github">Sign in with GitHub</a><p>
+<% end %>
+
+<%= styled_flash %>
+
+<%= yield %>
+
+</body>
+</html>
