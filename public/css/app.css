@@ -1,3 +1,12 @@
 .flash {
   background: lime;
 }
+
+.home_buttons {
+  color: #fff;
+  text-decoration: none;
+}
+
+.btn {
+  margin-bottom: 20px;
+}
