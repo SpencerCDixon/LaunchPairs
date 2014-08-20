@@ -2,11 +2,13 @@
   background: lime;
 }
 
-.home_buttons {
-  color: #fff;
-  text-decoration: none;
-}
-
 .btn {
   margin-bottom: 20px;
+}
+
+.tiny-img {
+    border-radius: 200px;
+    border: 1px solid white;
+    height: 50px;
+    width: 50px;
 }
