@@ -8,7 +8,7 @@ require 'sinatra/flash'
 require 'omniauth-github'
 require 'pg'
 
-set :port, 9000
+set :port, 9090
 
 configure do
   enable :sessions
@@ -107,31 +107,28 @@ end
 
 #### Profile Methods ####
 
-# def find_profile_by_id(id)
-#   sql= 'SELECT * FROM profiles WHERE id = $1 LIMIT 1'
-#
-#   profiles = db_connection do |db|
-#     db.exec_params(sql,[id])
-#   end
-#   profiles.first
-# end
-
 def all_profiles
   db_connection do |db|
     db.exec('SELECT * FROM profiles')
   end
 end
 
-def update_status(status)
-  sql = "INSERT INTO profiles (status) VALUES ($1)"
+#### Status Methods #####
+
+def all_status
+  db_connection do |db|
+    db.exec('SELECT * FROM status')
+  end
+end
+
+def update_status(userid, status, created_at)
+  sql = "INSERT INTO status (id, status, created_at) VALUES ($1 $2 $3)"
   db_connection do |db|
     db.exec(sql,[status])
   end
 end
 
-
 #### Routes ####
-
 
 get '/' do
   erb :index
@@ -147,7 +144,9 @@ end
 post '/users' do
   @users = all_users
   @profiles = all_profiles
-  update_status(params[:status])
+  # Status
+
+  update_status(session['user_id'],params[:status], Time.now)
   erb :'users/index'
 end
 
