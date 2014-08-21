@@ -134,6 +134,7 @@ def display_current_status(id)
     db.exec_params(sql, [id])
   end
   result.to_a.first
+
 end
 
 
@@ -148,16 +149,17 @@ get '/users' do
   @users = all_users
   @profiles = all_profiles
   @current_status = display_current_status(session['user_id'])
+
   erb :'users/index'
 end
 
 post '/users' do
   @users = all_users
   @profiles = all_profiles
-  # Status
+  @current_status = display_current_status(session['user_id'])
 
   update_status(session['user_id'],params[:status])
-  erb :'users/index'
+  redirect '/users'
 end
 
 get '/auth/github/callback' do

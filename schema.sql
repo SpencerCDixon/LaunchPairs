@@ -11,7 +11,6 @@ CREATE TABLE users(
 CREATE TABLE profiles (
   id integer references users(id),
   blog varchar(255) ,
-  status varchar(255)
 );
 
 CREATE TABLE status (
@@ -19,6 +18,16 @@ CREATE TABLE status (
   status varchar(255),
   created_at timestamp NOT NULL
 );
+
+CREATE TABLE pairs (
+
+)
+
+
+CREATE TABLE projects (
+  id integer references users(id)
+
+)
 
 
 SELECT status FROM profiles;
