@@ -29,3 +29,33 @@
   </tr>
   <% end %>
 </table>
+
+<h1> Current Status </h1>
+<p> <%= @current_status["status"] %> </p>
+
+
+<h1> All Profiles Available </h1>
+
+<!-- Change Status Form -->
+<form action="/users" method="post">
+  <label for="status">Status:  </label>
+  <input type="text" name="status" id="status" />
+
+  <input type="submit" value="Search" />
+</form>
+
+Display Profile Information
+<table class="table">
+  <tr>
+    <th>ID</th>
+    <th>Blog</th>
+    <th>Status</th>
+  </tr>
+  <% @profiles.each do |profile| %>
+  <tr>
+    <td><%= profile['id'] %></td>
+    <td><a href="http://<%= profile['blog'] %>"><%= profile['blog'] %></a></td>
+    <td><%= profile['status'] %></td>
+  </tr>
+  <% end %>
+</table>
