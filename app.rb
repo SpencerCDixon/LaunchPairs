@@ -122,6 +122,13 @@ def all_profiles
   end
 end
 
+def update_status(status)
+  sql = "INSERT INTO profiles (status) VALUES ($1)"
+  db_connection do |db|
+    db.exec(sql,[status])
+  end
+end
+
 
 #### Routes ####
 
@@ -134,7 +141,13 @@ get '/users' do
   authenticate!
   @users = all_users
   @profiles = all_profiles
+  erb :'users/index'
+end
 
+post '/users' do
+  @users = all_users
+  @profiles = all_profiles
+  update_status(params[:status])
   erb :'users/index'
 end
 
