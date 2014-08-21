@@ -8,7 +8,7 @@ require 'sinatra/flash'
 require 'omniauth-github'
 require 'pg'
 
-set :port, 9090
+set :port, 9000
 
 configure do
   enable :sessions
@@ -121,12 +121,21 @@ def all_status
   end
 end
 
-def update_status(userid, status, created_at)
-  sql = "INSERT INTO status (id, status, created_at) VALUES ($1 $2 $3)"
+def update_status(userid, status)
+  sql = "INSERT INTO status (id, status, created_at) VALUES ($1, $2, now())"
   db_connection do |db|
-    db.exec(sql,[status])
+    db.exec(sql,[userid, status])
   end
 end
+
+def display_current_status(id)
+  sql = "SELECT * FROM status WHERE id = $1 ORDER BY created_at DESC LIMIT 1"
+  result = db_connection do |db|
+    db.exec_params(sql, [id])
+  end
+  result.to_a.first
+end
+
 
 #### Routes ####
 
@@ -138,6 +147,7 @@ get '/users' do
   authenticate!
   @users = all_users
   @profiles = all_profiles
+  @current_status = display_current_status(session['user_id'])
   erb :'users/index'
 end
 
@@ -146,7 +156,7 @@ post '/users' do
   @profiles = all_profiles
   # Status
 
-  update_status(session['user_id'],params[:status], Time.now)
+  update_status(session['user_id'],params[:status])
   erb :'users/index'
 end
 

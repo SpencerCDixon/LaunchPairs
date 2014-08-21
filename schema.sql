@@ -12,7 +12,6 @@ CREATE TABLE profiles (
   id integer references users(id),
   blog varchar(255) ,
   status varchar(255)
-  created_at
 );
 
 CREATE TABLE status (
