@@ -20,7 +20,9 @@ CREATE TABLE status (
 );
 
 CREATE TABLE pairs (
-
+  id integer references users(id),
+  person_id integer,
+  person
 )
 
 
@@ -44,3 +46,29 @@ select * from status order by created_at desc limit 1;
 
 # Gets one based on ID
 select * from status WHERE id = 2 order by created_at desc limit 1;
+
+
+##### NEW DATABASE DESIGN PREPARATION #########
+CREATE TABLE users(
+  id serial PRIMARY KEY,
+  uid varchar(255) NOT NULL,
+  provider varchar(255) NOT NULL,
+  username varchar(255) NOT NULL,
+  name varchar(255) NOT NULL,
+  email varchar(255) NOT NULL,
+  avatar_url varchar(255) NOT NULL,
+  blog_url varchar(255)
+);
+
+CREATE TABLE status (
+  id serial PRIMARY KEY,
+  user_id integer FOREIGN KEY users(id)
+  status varchar(255),
+  created_at timestamp NOT NULL
+);
+
+CREATE TABLE pairings (
+  id serial PRIMARY KEY,
+  user_id integer FOREIGN KEY users(id),
+  pair_id integer FOREIGN KEY users(id)
+);
