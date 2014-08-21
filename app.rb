@@ -23,6 +23,8 @@ configure :development do
   require 'pry'
 end
 
+
+
 def db_connection
   begin
     connection = PG.connect(dbname: 'sinatra_omniauth_dev')
@@ -31,6 +33,7 @@ def db_connection
     connection.close
   end
 end
+
 
 def user_from_omniauth(auth)
   {
@@ -46,6 +49,7 @@ end
 def find_or_create_user(attr)
   find_user_by_uid(attr[:uid]) || create_user(attr)
 end
+
 
 def find_user_by_uid(uid)
   sql = 'SELECT * FROM users WHERE uid = $1 LIMIT 1'
@@ -86,7 +90,7 @@ end
 
 def authenticate!
   unless current_user
-    flash[:notice] = 'You need to sign in before you can go there!'
+    flash[:negative] = 'You need to sign in before you can go there!'
     redirect '/'
   end
 end
@@ -101,6 +105,27 @@ helpers do
   end
 end
 
+#### Profile Methods ####
+
+# def find_profile_by_id(id)
+#   sql= 'SELECT * FROM profiles WHERE id = $1 LIMIT 1'
+#
+#   profiles = db_connection do |db|
+#     db.exec_params(sql,[id])
+#   end
+#   profiles.first
+# end
+
+def all_profiles
+  db_connection do |db|
+    db.exec('SELECT * FROM profiles')
+  end
+end
+
+
+#### Routes ####
+
+
 get '/' do
   erb :index
 end
@@ -108,6 +133,7 @@ end
 get '/users' do
   authenticate!
   @users = all_users
+  @profiles = all_profiles
 
   erb :'users/index'
 end

@@ -7,3 +7,9 @@ CREATE TABLE users(
   email varchar(255) NOT NULL,
   avatar_url varchar(255) NOT NULL
 );
+
+CREATE TABLE profiles (
+  id integer references users(id),
+  blog varchar(255) ,
+  status varchar(255) 
+);

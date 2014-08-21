@@ -23,9 +23,15 @@
   <% end %>
 
   <% if flash.any? %>
+    <% if flash[:notice] %>
     <div class="alert alert-info">
       <%= flash[:notice] %>
     </div>
+    <% else %>
+    <div class="alert alert-danger">
+      <%= flash[:negative] %>
+    </div>
+  <% end %>
   <% end %>
 
 </div>
