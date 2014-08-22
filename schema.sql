@@ -8,28 +8,29 @@ CREATE TABLE users(
   avatar_url varchar(255) NOT NULL
 );
 
-CREATE TABLE profiles (
-  id integer references users(id),
-  blog varchar(255) ,
-);
-
-CREATE TABLE status (
-  id integer references users(id),
-  status varchar(255),
-  created_at timestamp NOT NULL
-);
-
-CREATE TABLE pairs (
-  id integer references users(id),
-  person_id integer,
-  person
-)
-
-
-CREATE TABLE projects (
-  id integer references users(id)
-
-)
+-- CREATE TABLE profiles (
+--   id integer references users(id),
+--   blog varchar(255) ,
+-- );
+--
+-- CREATE TABLE status (
+--   id integer references users(id),
+--   status varchar(255),
+--   created_at timestamp NOT NULL
+-- );
+--
+-- CREATE TABLE pairs (
+--   id integer references users(id),
+--   person_id integer,
+--   person
+-- );
+--
+--
+-- CREATE TABLE projects (
+--   id integer references users(id),
+--   project varchar(255),
+--   created_at timestamp NOT NULL
+-- );
 
 
 SELECT status FROM profiles;
@@ -71,4 +72,22 @@ CREATE TABLE pairings (
   id serial PRIMARY KEY,
   user_id integer REFERENCES users(id),
   pair_id integer REFERENCES users(id)
+);
+
+CREATE TABLE projects (
+  id serial PRIMARY KEY,
+  user_id integer REFERENCES users(id),
+  project varchar(255),
+  created_at timestamp NOT NULL
+);
+
+CREATE TABLE personal_info (
+  id serial PRIMARY KEY,
+  user_id integer REFERENCES users(id),
+  breakable_toy text,
+  phone_number varchar(30),
+  blog_url varchar(255),
+  twitter varchar(80),
+  linkedin varchar(100),
+  created_at timestamp NOT NULL
 );

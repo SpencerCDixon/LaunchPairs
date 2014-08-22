@@ -1,4 +1,3 @@
--Decide on database configurations
 -Create methods that populate databases and retrieve correct information when we need it.
 -Make a view page for all users that allows current user to change their status.
 -Create a personal profile page that can be edited when necessary

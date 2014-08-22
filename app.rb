@@ -81,9 +81,15 @@ def create_user(attr)
   VALUES ($1, 'Enter Your Status', now());
 }
 
+  project = %{
+    INSERT INTO projects (user_id, project, created_at)
+    VALUES ($1, 'Sleeping', now());
+  }
+
   db_connection do |db|
     result = db.exec_params(sql, attr.values)
     db.exec_params(status, [result[0]["id"].to_i])
+    db.exec_params(project, [result[0]["id"].to_i])
     result[0]
   end
 
@@ -120,6 +126,13 @@ helpers do
     end
     result.to_a.first
   end
+  def show_current_project(id)
+    sql = "SELECT * FROM projects WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1"
+    result = db_connection do |db|
+      db.exec_params(sql, [id])
+    end
+    result.to_a.first
+  end
 end
 
 #### Status Methods #####
@@ -129,6 +142,22 @@ end
 #     db.exec('SELECT * FROM status')
 #   end
 # end
+
+def update_project(userid, project)
+  sql = "INSERT INTO projects (user_id, project, created_at) VALUES ($1, $2, now())"
+  db_connection do |db|
+    db.exec(sql,[userid, project])
+  end
+end
+
+def display_current_project(id)
+  sql = "SELECT * FROM projects WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1"
+  result = db_connection do |db|
+    db.exec_params(sql, [id])
+  end
+  result.to_a.first
+end
+
 
 # changed "id" to "user_id"
 def update_status(userid, status)
@@ -177,6 +206,7 @@ get '/profile/:user_id' do
   authenticate!
   @current_profile = find_user_by_id(params[:user_id])
   @current_status = display_current_status(session['user_id'])
+  @current_project = display_current_project(session['user_id'])
   erb :profile
 end
 # Will update status for profile
@@ -185,6 +215,20 @@ post '/profile/:user_id' do
   update_status(session['user_id'],params[:status])
   redirect '/users'
 end
+
+post '/profile/:user_id/projects' do
+  @users = all_users
+
+  update_project(session['user_id'],params[:project])
+  redirect '/users'
+end
+
+# Profile Stuff
+get '/profile/:user_id/edit' do
+
+  erb :personal_info_form
+end
+
 
 
 get '/sign_out' do

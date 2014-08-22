@@ -33,7 +33,7 @@
       <td><a href="/profile/<%= user['id'] %>"><%= user['name'] %></a></td>
       <td class="button-container"><a href="#" class="button [tiny small large] button-index"><%=  show_current_status(user['id'])["status"] %></a></td>
 
-      <td class="button-container"><a href="#" class="button [tiny small large] button-index">Current Project</a></td>
+      <td class="button-container"><a href="#" class="button [tiny small large] button-index"><%=  show_current_project(user['id'])["project"] %></a></td>
       <td><a href="#" class="button [tiny small large]">Paired</a></td>
     </tr>
     <% end %>
