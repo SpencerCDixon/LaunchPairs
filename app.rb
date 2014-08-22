@@ -10,6 +10,7 @@ require 'pg'
 
 set :port, 9000
 
+## Configure Database & OmniAuth ##
 configure do
   enable :sessions
   set :session_secret, ENV['SESSION_SECRET']
@@ -23,8 +24,7 @@ configure :development do
   require 'pry'
 end
 
-
-
+# Connect to database
 def db_connection
   begin
     connection = PG.connect(dbname: 'sinatra_omniauth_dev')
@@ -34,7 +34,6 @@ def db_connection
   end
 end
 
-
 def user_from_omniauth(auth)
   {
     uid: auth.uid,
@@ -42,7 +41,7 @@ def user_from_omniauth(auth)
     username: auth.info.nickname,
     name: auth.info.name,
     email: auth.info.email,
-    avatar_url: auth.info.image
+    avatar_url: auth.info.image,
   }
 end
 
@@ -74,12 +73,20 @@ end
 def create_user(attr)
   sql = %{
     INSERT INTO users (uid, provider, username, name, email, avatar_url)
-    VALUES ($1, $2, $3, $4, $5, $6);
+    VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;
   }
 
+  status = %{
+  INSERT INTO status (user_id, status, created_at)
+  VALUES ($1, 'Enter Your Status', now());
+}
+
   db_connection do |db|
-    db.exec_params(sql, attr.values)
+    result = db.exec_params(sql, attr.values)
+    db.exec_params(status, [result[0]["id"].to_i])
+    result[0]
   end
+
 end
 
 def all_users
@@ -95,6 +102,8 @@ def authenticate!
   end
 end
 
+## Helpers ##
+
 helpers do
   def signed_in?
     !current_user.nil?
@@ -103,78 +112,83 @@ helpers do
   def current_user
     find_user_by_id(session['user_id'])
   end
-end
 
-#### Profile Methods ####
-
-def all_profiles
-  db_connection do |db|
-    db.exec('SELECT * FROM profiles')
+  def show_current_status(id)
+    sql = "SELECT * FROM status WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1"
+    result = db_connection do |db|
+      db.exec_params(sql, [id])
+    end
+    result.to_a.first
   end
 end
 
 #### Status Methods #####
 
-def all_status
-  db_connection do |db|
-    db.exec('SELECT * FROM status')
-  end
-end
+# def all_statuses
+#   db_connection do |db|
+#     db.exec('SELECT * FROM status')
+#   end
+# end
 
+# changed "id" to "user_id"
 def update_status(userid, status)
-  sql = "INSERT INTO status (id, status, created_at) VALUES ($1, $2, now())"
+  sql = "INSERT INTO status (user_id, status, created_at) VALUES ($1, $2, now())"
   db_connection do |db|
     db.exec(sql,[userid, status])
   end
 end
 
+# changed "id" to "user_id"
 def display_current_status(id)
-  sql = "SELECT * FROM status WHERE id = $1 ORDER BY created_at DESC LIMIT 1"
+  sql = "SELECT * FROM status WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1"
   result = db_connection do |db|
     db.exec_params(sql, [id])
   end
   result.to_a.first
-
 end
 
 
 #### Routes ####
 
 get '/' do
-  erb :index
+  erb :login
 end
 
 get '/users' do
   authenticate!
   @users = all_users
-  @profiles = all_profiles
   @current_status = display_current_status(session['user_id'])
 
-  erb :'users/index'
-end
-
-post '/users' do
-  @users = all_users
-  @profiles = all_profiles
-  @current_status = display_current_status(session['user_id'])
-
-  update_status(session['user_id'],params[:status])
-  redirect '/users'
+  erb :index
 end
 
 get '/auth/github/callback' do
   auth = env['omniauth.auth']
   user_attributes = user_from_omniauth(auth)
   user = find_or_create_user(user_attributes)
-
   session['user_id'] = user['id']
   flash[:notice] = 'Thanks for logging in!'
 
   redirect '/users'
 end
 
+# Shows profile
+get '/profile/:user_id' do
+  authenticate!
+  @current_profile = find_user_by_id(params[:user_id])
+  @current_status = display_current_status(session['user_id'])
+  erb :profile
+end
+# Will update status for profile
+post '/profile/:user_id' do
+  @users = all_users
+  update_status(session['user_id'],params[:status])
+  redirect '/users'
+end
+
+
 get '/sign_out' do
-  session['user_id'] = nil
+  session.clear
   flash[:notice] = 'See ya!'
   redirect '/'
 end
