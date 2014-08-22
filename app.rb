@@ -10,6 +10,7 @@ require 'pg'
 
 set :port, 9000
 
+## Configure Database & OmniAuth ##
 configure do
   enable :sessions
   set :session_secret, ENV['SESSION_SECRET']
@@ -23,8 +24,7 @@ configure :development do
   require 'pry'
 end
 
-
-
+# Connect to database
 def db_connection
   begin
     connection = PG.connect(dbname: 'sinatra_omniauth_dev')
@@ -34,7 +34,6 @@ def db_connection
   end
 end
 
-
 def user_from_omniauth(auth)
   {
     uid: auth.uid,
@@ -42,7 +41,7 @@ def user_from_omniauth(auth)
     username: auth.info.nickname,
     name: auth.info.name,
     email: auth.info.email,
-    avatar_url: auth.info.image
+    avatar_url: auth.info.image,
   }
 end
 
@@ -74,12 +73,20 @@ end
 def create_user(attr)
   sql = %{
     INSERT INTO users (uid, provider, username, name, email, avatar_url)
-    VALUES ($1, $2, $3, $4, $5, $6);
+    VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;
   }
 
+  status = %{
+  INSERT INTO status (user_id, status, created_at)
+  VALUES ($1, 'Enter Your Status', now());
+}
+
   db_connection do |db|
-    db.exec_params(sql, attr.values)
+    result = db.exec_params(sql, attr.values)
+    db.exec_params(status, [result[0]["id"].to_i])
+    result[0]
   end
+
 end
 
 def all_users
@@ -94,6 +101,8 @@ def authenticate!
     redirect '/'
   end
 end
+
+## Helpers ##
 
 helpers do
   def signed_in?
