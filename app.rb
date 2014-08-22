@@ -138,6 +138,10 @@ helpers do
     end
     result.to_a.first
   end
+
+  def url(params)
+    url = "/profile/" + params
+  end
 end
 
 #### Status Methods #####
@@ -259,7 +263,7 @@ post '/profile/:user_id/edit' do
 
 update_profile(session['user_id'],params[:breakable_toy],params[:phone_number], params[:blog_url], params[:twitter], params[:linkedin])
 
-  redirect '/users'
+  redirect to("/profile/#{params[:user_id]}")
 end
 
 
