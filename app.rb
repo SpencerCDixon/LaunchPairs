@@ -107,34 +107,36 @@ end
 
 #### Profile Methods ####
 
-def all_profiles
-  db_connection do |db|
-    db.exec('SELECT * FROM profiles')
-  end
-end
+# def all_profiles
+#   db_connection do |db|
+#     db.exec('SELECT * FROM profiles')
+#   end
+# end
 
 #### Status Methods #####
 
-def all_status
+def all_statuses
   db_connection do |db|
     db.exec('SELECT * FROM status')
   end
 end
 
+
+# changed "id" to "user_id"
 def update_status(userid, status)
-  sql = "INSERT INTO status (id, status, created_at) VALUES ($1, $2, now())"
+  sql = "INSERT INTO status (user_id, status, created_at) VALUES ($1, $2, now())"
   db_connection do |db|
     db.exec(sql,[userid, status])
   end
 end
 
+# changed "id" to "user_id"
 def display_current_status(id)
-  sql = "SELECT * FROM status WHERE id = $1 ORDER BY created_at DESC LIMIT 1"
+  sql = "SELECT * FROM status WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1"
   result = db_connection do |db|
     db.exec_params(sql, [id])
   end
   result.to_a.first
-
 end
 
 
@@ -147,7 +149,7 @@ end
 get '/users' do
   authenticate!
   @users = all_users
-  @profiles = all_profiles
+
   @current_status = display_current_status(session['user_id'])
 
   erb :'users/index'
@@ -155,7 +157,7 @@ end
 
 post '/users' do
   @users = all_users
-  @profiles = all_profiles
+
   @current_status = display_current_status(session['user_id'])
 
   update_status(session['user_id'],params[:status])
@@ -166,7 +168,6 @@ get '/auth/github/callback' do
   auth = env['omniauth.auth']
   user_attributes = user_from_omniauth(auth)
   user = find_or_create_user(user_attributes)
-
   session['user_id'] = user['id']
   flash[:notice] = 'Thanks for logging in!'
 
@@ -174,7 +175,7 @@ get '/auth/github/callback' do
 end
 
 get '/sign_out' do
-  session['user_id'] = nil
+  session.clear
   flash[:notice] = 'See ya!'
   redirect '/'
 end

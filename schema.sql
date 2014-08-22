@@ -35,7 +35,7 @@ CREATE TABLE projects (
 SELECT status FROM profiles;
 
 # Adds data into status table
-INSERT INTO status (id, status, created_at) VALUES (1,'doing something',now());
+INSERT INTO status (user_id, status, created_at) VALUES (2,'doing something',now());
 
 
 # Get the most recent status from someone?
@@ -62,13 +62,13 @@ CREATE TABLE users(
 
 CREATE TABLE status (
   id serial PRIMARY KEY,
-  user_id integer FOREIGN KEY users(id)
+  user_id integer REFERENCES users(id),
   status varchar(255),
   created_at timestamp NOT NULL
 );
 
 CREATE TABLE pairings (
   id serial PRIMARY KEY,
-  user_id integer FOREIGN KEY users(id),
-  pair_id integer FOREIGN KEY users(id)
+  user_id integer REFERENCES users(id),
+  pair_id integer REFERENCES users(id)
 );
