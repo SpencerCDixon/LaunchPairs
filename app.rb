@@ -86,10 +86,15 @@ def create_user(attr)
     VALUES ($1, 'Sleeping', now());
   }
 
+  personal_info = %{
+    INSERT INTO personal_info (user_id, breakable_toy, phone_number, blog_url, twitter, linkedin, created_at) VALUES ($1, "", "", "", "", "", now())
+  }
+
   db_connection do |db|
     result = db.exec_params(sql, attr.values)
     db.exec_params(status, [result[0]["id"].to_i])
     db.exec_params(project, [result[0]["id"].to_i])
+    db.exec_params(personal_info, [result[0]["id"].to_i])
     result[0]
   end
 
@@ -184,6 +189,14 @@ def update_profile(id, breakable, phone, blog, twitter, linkedin)
     end
 end
 
+def display_current_personal_info(id)
+  sql = "SELECT * FROM personal_info WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1"
+    result = db_connection do |db|
+      db.exec_params(sql, [id])
+    end
+  result.to_a.first
+end
+
 #### Routes ####
 
 get '/' do
@@ -214,6 +227,7 @@ get '/profile/:user_id' do
   @current_profile = find_user_by_id(params[:user_id])
   @current_status = display_current_status(session['user_id'])
   @current_project = display_current_project(session['user_id'])
+  @current_personal_info = display_current_personal_info(session['user_id'])
   erb :profile
 end
 # Will update status for profile
@@ -244,7 +258,6 @@ end
 post '/profile/:user_id/edit' do
 
 update_profile(session['user_id'],params[:breakable_toy],params[:phone_number], params[:blog_url], params[:twitter], params[:linkedin])
-binding.pry
 
   redirect '/users'
 end
