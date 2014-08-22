@@ -87,7 +87,7 @@ def create_user(attr)
   }
 
   personal_info = %{
-    INSERT INTO personal_info (user_id, breakable_toy, phone_number, blog_url, twitter, linkedin, created_at) VALUES ($1, "", "", "", "", "", now())
+    INSERT INTO personal_info (user_id, breakable_toy, phone_number, blog_url, twitter, linkedin, created_at) VALUES ($1, '', '', '', '', '', now())
   }
 
   db_connection do |db|
