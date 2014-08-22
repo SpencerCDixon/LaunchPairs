@@ -176,6 +176,13 @@ def display_current_status(id)
   result.to_a.first
 end
 
+def update_profile(id, breakable, phone, blog, twitter, linkedin)
+  sql = 'INSERT INTO personal_info (user_id, breakable_toy, phone_number, blog_url, twitter, linkedin, created_at) VALUES ($1, $2, $3, $4, $5, $6, now())'
+
+  db_connection do |db|
+    db.exec(sql,[id, breakable, phone, blog, twitter, linkedin])
+    end
+end
 
 #### Routes ####
 
@@ -227,6 +234,19 @@ end
 get '/profile/:user_id/edit' do
 
   erb :personal_info_form
+end
+
+#######################
+#### WE'RE HERE
+###################
+
+
+post '/profile/:user_id/edit' do
+
+update_profile(session['user_id'],params[:breakable_toy],params[:phone_number], params[:blog_url], params[:twitter], params[:linkedin])
+binding.pry
+
+  redirect '/users'
 end
 
 
