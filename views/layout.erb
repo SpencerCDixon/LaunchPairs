@@ -2,38 +2,52 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Launch Pairs</title>
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-  <link href="/css/app.css" media="all" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="/css/normalize.css">
+  <link rel="stylesheet" href="/css/foundation.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
+
 <body>
-<div class="container">
+  <header>
+  <%=  erb :nav %>
+  </header>
 
   <section>
-  <%= yield %>
+    <%= yield %>
   </section>
 
-  <% if signed_in? %>
-    <p>
-      You are currently signed in as <%= current_user['email'] %>!
-      <a href="/sign_out">Sign Out</a>
-    </p>
-  <% else %>
-    <button class="btn btn-info"><a href="/auth/github">Sign in with GitHub</a></button>
-  <% end %>
-
-  <% if flash.any? %>
-    <% if flash[:notice] %>
-    <div class="alert alert-info">
-      <%= flash[:notice] %>
-    </div>
+<div class="row">
+  <div class="panel login callout radius">
+    <h1>Welcome to Launch Pairs</h1>
+    <!-- <h2><em>Connecting Coders</em></h2> -->
+    <h3><em>Catchy tagline to explain point of app</em></h3>
+    <% if signed_in? %>
+      <p>
+        You are currently signed in as <%= current_user['email'] %>!
+        <a href="/sign_out">Sign Out</a>
+      </p>
     <% else %>
-    <div class="alert alert-danger">
-      <%= flash[:negative] %>
-    </div>
-  <% end %>
-  <% end %>
+      <a class="login-button button small button-index" href="/auth/github">Sign in with GitHub</a>
+    <% end %>
 
+<!--   Here goes code to display flashes
+ -->  <% if flash.any? %>
+      <% if flash[:notice] %>
+      <div>
+        <%= flash[:notice] %>
+      </div>
+      <% else %>
+      <div>
+        <%= flash[:negative] %>
+      </div>
+    <% end %>
+    <% end %>
+  </div>
 </div>
+
+  <footer>
+    <%= erb :footer %>
+  </footer>
+
 </body>
 </html>

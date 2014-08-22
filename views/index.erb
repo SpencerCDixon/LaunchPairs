@@ -1,4 +1,43 @@
-<h1>Welcome To Launch Pairs!</h1>
-<p>A website designed to optomize the pairing experience and ensure pair programming with as many people as possible</p>
+<div class="row">
+  <div class="large-12 columns">
+    <h1>All Launchers</h1>
+  </div>
+</div>
 
-<button class="btn btn-info"><a class="home_buttons" href="/users">View all the Users</a></button>
+<div class="row">
+  <div class="large-12 columns">
+    <div data-alert class="alert-box info radius">
+      This is an alert box that will flash when things change.
+      <a href="#" class="close">&times;</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+<div class="large-12 columns">
+<table style="margin: 0 auto;">
+  <tbody>
+    <thead>
+      <tr>
+        <th width="90">Mood</th>
+        <th width="200">Name</th>
+        <th width="200">Status</th>
+        <th width="500">Current Project</th>
+        <th width="100">Paired?</th>
+      </tr>
+    </thead>
+    <% @users.each do |user| %>
+    <tr>
+      <td><img class="tiny-img happy-mood" src="<%= user['avatar_url'] %>"></td>
+      <td><a href="/profile/<%= user['id'] %>"><%= user['name'] %></a></td>
+      <td class="button-container"><a href="#" class="button [tiny small large] button-index"><%=  show_current_status(user['id'])["status"] %></a></td>
+
+      <td class="button-container"><a href="#" class="button [tiny small large] button-index">Current Project</a></td>
+      <td><a href="#" class="button [tiny small large]">Paired</a></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+</div>

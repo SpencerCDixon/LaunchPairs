@@ -1,0 +1,37 @@
+<div class="panel callout radius">
+  <form action="/profile/<%= current_user['id'] %>" method="post">
+  <div class="row">
+    <div class="large-12 columns">
+      <div class="row collapse">
+        <div class="small-10 columns">
+          <select name="status">
+            <option name="1" type="text">Ready To Pair</option>
+            <option name="2" type="text">In The Zone</option>
+            <option name="3" type="text">Open To Help</option>
+          </select>
+        </div>
+        <div class="small-2 columns">
+          <input class="button postfix" type="submit" value="Change">
+        </div>
+      </div>
+    </div>
+  </div>
+  </form>
+</div>
+
+<div class="panel callout radius">
+  <form>
+  <div class="row">
+    <div class="large-12 columns">
+      <div class="row collapse">
+        <div class="small-10 columns">
+          <input type="text" placeholder="Current Project">
+        </div>
+        <div class="small-2 columns">
+          <a href="#" class="button postfix">Go</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  </form>
+</div>

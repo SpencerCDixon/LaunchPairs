@@ -1,0 +1,64 @@
+.custom-footer {
+  background: #313131;
+  width: 100%;
+  height: 80px;
+  position:absolute;
+  bottom:0;
+  left:0;
+}
+
+.footer-button {
+  margin: 0 auto;
+}
+
+.tiny-img {
+    border-radius: 200px;
+    border: 1px solid white;
+    height: 50px;
+    width: 50px;
+}
+
+
+
+.large-img {
+    border-radius: 6px;
+    border: 1px solid white;
+    height: 300px;
+    width: 100%;
+}
+
+.personal-info {
+  margin-top: 10px;
+  border-top: 5px solid #333333;
+  border-bottom: 5px solid #333333;
+  padding: 5px;
+  width: 100%;
+}
+
+/* Login page css */
+
+.login {
+  margin-top: 10%;
+  text-align: center;
+}
+
+.login-button {
+  margin-top: 20px;
+  width: 70%;
+}
+
+
+/* Button styling for view all page */
+
+.button-container {
+  text-align: center;
+}
+
+.button-index {
+  width: 90%;
+}
+
+/* Styles for different Moods */
+/* .happy-mood {
+  border: 5px solid #0088B5;
+} */

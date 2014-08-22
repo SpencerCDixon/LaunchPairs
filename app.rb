@@ -112,24 +112,23 @@ helpers do
   def current_user
     find_user_by_id(session['user_id'])
   end
-end
 
-#### Profile Methods ####
-
-# def all_profiles
-#   db_connection do |db|
-#     db.exec('SELECT * FROM profiles')
-#   end
-# end
-
-#### Status Methods #####
-
-def all_statuses
-  db_connection do |db|
-    db.exec('SELECT * FROM status')
+  def show_current_status(id)
+    sql = "SELECT * FROM status WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1"
+    result = db_connection do |db|
+      db.exec_params(sql, [id])
+    end
+    result.to_a.first
   end
 end
 
+#### Status Methods #####
+
+# def all_statuses
+#   db_connection do |db|
+#     db.exec('SELECT * FROM status')
+#   end
+# end
 
 # changed "id" to "user_id"
 def update_status(userid, status)
@@ -152,25 +151,15 @@ end
 #### Routes ####
 
 get '/' do
-  erb :index
+  erb :login
 end
 
 get '/users' do
   authenticate!
   @users = all_users
-
   @current_status = display_current_status(session['user_id'])
 
-  erb :'users/index'
-end
-
-post '/users' do
-  @users = all_users
-
-  @current_status = display_current_status(session['user_id'])
-
-  update_status(session['user_id'],params[:status])
-  redirect '/users'
+  erb :index
 end
 
 get '/auth/github/callback' do
@@ -182,6 +171,21 @@ get '/auth/github/callback' do
 
   redirect '/users'
 end
+
+# Shows profile
+get '/profile/:user_id' do
+  authenticate!
+  @current_profile = find_user_by_id(params[:user_id])
+  @current_status = display_current_status(session['user_id'])
+  erb :profile
+end
+# Will update status for profile
+post '/profile/:user_id' do
+  @users = all_users
+  update_status(session['user_id'],params[:status])
+  redirect '/users'
+end
+
 
 get '/sign_out' do
   session.clear
