@@ -139,18 +139,9 @@ helpers do
     result.to_a.first
   end
 
-  def url(params)
-    url = "/profile/" + params
-  end
 end
 
 #### Status Methods #####
-
-# def all_statuses
-#   db_connection do |db|
-#     db.exec('SELECT * FROM status')
-#   end
-# end
 
 def update_project(userid, project)
   sql = "INSERT INTO projects (user_id, project, created_at) VALUES ($1, $2, now())"
@@ -215,12 +206,15 @@ get '/users' do
   erb :index
 end
 
+####################
+### Github Auth  ###
+####################
 get '/auth/github/callback' do
   auth = env['omniauth.auth']
   user_attributes = user_from_omniauth(auth)
   user = find_or_create_user(user_attributes)
   session['user_id'] = user['id']
-  flash[:notice] = 'Thanks for logging in!'
+  flash[:success] = 'Thanks for logging in! Don\'t forget to update your status & current project.'
 
   redirect '/users'
 end
@@ -248,28 +242,24 @@ post '/profile/:user_id/projects' do
   redirect '/users'
 end
 
-# Profile Stuff
+####################
+### Profile Info ###
+####################
 get '/profile/:user_id/edit' do
-
   erb :personal_info_form
 end
 
-#######################
-#### WE'RE HERE
-###################
-
-
 post '/profile/:user_id/edit' do
 
-update_profile(session['user_id'],params[:breakable_toy],params[:phone_number], params[:blog_url], params[:twitter], params[:linkedin])
+  update_profile(session['user_id'],params[:breakable_toy],params[:phone_number], params[:blog_url], params[:twitter], params[:linkedin])
 
   redirect to("/profile/#{params[:user_id]}")
 end
-
-
-
+####################
+### Signing Out  ###
+####################
 get '/sign_out' do
   session.clear
-  flash[:notice] = 'See ya!'
+  flash[:notice] = 'See ya! I hope you had an enjoyable pairing experience.'
   redirect '/'
 end

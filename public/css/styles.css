@@ -2,13 +2,7 @@
   background: #313131;
   width: 100%;
   height: 80px;
-  position:absolute;
-  bottom:0;
-  left:0;
-}
-
-.footer-button {
-  margin: 0 auto;
+  
 }
 
 .tiny-img {
@@ -17,8 +11,6 @@
     height: 50px;
     width: 50px;
 }
-
-
 
 .large-img {
     border-radius: 6px;

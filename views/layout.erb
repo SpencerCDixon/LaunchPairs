@@ -8,42 +8,48 @@
 </head>
 
 <body>
+
   <header>
   <%=  erb :nav %>
   </header>
 
+<% if flash.any? %>
+  <% if flash[:notice] %>
+  <p></p>
+    <div class="row">
+      <div class="large-12 columns">
+        <div data-alert class="alert-box info radius">
+            <%= flash[:notice] %>
+          <a href="#" class="close">&times;</a>
+        </div>
+      </div>
+    </div>
+  <% elsif flash[:negative] %>
+  <p></p>
+    <div class="row">
+      <div class="large-12 columns">
+        <div data-alert class="alert-box warning radius">
+            <%= flash[:negative] %>
+          <a href="#" class="close">&times;</a>
+        </div>
+      </div>
+    </div>
+  <% else %>
+  <p></p>
+    <div class="row">
+      <div class="large-12 columns">
+        <div data-alert class="alert-box success radius">
+            <%= flash[:success] %>
+          <a href="#" class="close">&times;</a>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+
   <section>
     <%= yield %>
   </section>
-
-<div class="row">
-  <div class="panel login callout radius">
-    <h1>Welcome to Launch Pairs</h1>
-    <!-- <h2><em>Connecting Coders</em></h2> -->
-    <h3><em>Catchy tagline to explain point of app</em></h3>
-    <% if signed_in? %>
-      <p>
-        You are currently signed in as <%= current_user['email'] %>!
-        <a href="/sign_out">Sign Out</a>
-      </p>
-    <% else %>
-      <a class="login-button button small button-index" href="/auth/github">Sign in with GitHub</a>
-    <% end %>
-
-<!--   Here goes code to display flashes
- -->  <% if flash.any? %>
-      <% if flash[:notice] %>
-      <div>
-        <%= flash[:notice] %>
-      </div>
-      <% else %>
-      <div>
-        <%= flash[:negative] %>
-      </div>
-    <% end %>
-    <% end %>
-  </div>
-</div>
 
   <footer>
     <%= erb :footer %>

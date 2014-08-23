@@ -1,15 +1,6 @@
 <p> </p>
-<div class="row">
-  <div class="large-12 columns">
-    <div data-alert class="alert-box info radius">
-      This is an alert box that will flash when things change.
-      <a href="#" class="close">&times;</a>
-    </div>
-  </div>
-</div>
 
 <div class="row">
-
   <!-- Left hand side of the page -->
   <div class="large-4 columns">
     <img class="large-img" src="<%= @current_profile["avatar_url"] %>">
@@ -36,7 +27,7 @@
 
     <%= erb :form %>
     <h3> Ideas For My Breakable Toy <h3>
-    <p><%=@current_personal_info["breakable_toy"]%></p>
+    <p><%= @current_personal_info["breakable_toy"] %></p>
 
     <h3> People You've Paired With </h3>
 

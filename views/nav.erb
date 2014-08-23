@@ -9,9 +9,13 @@
 
   <section class="top-bar-section">
     <ul class="right">
+      <% if signed_in? %>
       <li class=""><a href="/users">Get Paired</a></li>
-      <li class=""><a href="/profile">View Profile</a></li>
-      <li class=""><a href="/login">Login</a></li>
+      <li class=""><a href="/profile/<%= current_user['id'] %>">View Profile</a></li>
+      <li class=""><a href="/sign_out">Log Out</a></li>
+      <% else %>
+      <li class=""><a href="/auth/github">Login</a></li>
+      <% end %>
     </ul>
   </section>
 </nav>
