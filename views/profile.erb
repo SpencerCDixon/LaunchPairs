@@ -7,27 +7,56 @@
     <div class="large-12 columns">
       <a href="/profile/<%= current_user['id'] %>/edit"><h3 class="button large even" style="margin-top: 20px; width: 100%;"> Update Personal Info </h3></a>
       <div class="personal-info">
-        <h4> Blog URL </h4>
-        <p><a href="<%=@current_personal_info["blog_url"]%>"><%=@current_personal_info["blog_url"]%></a></p>
-        <h4> Phone Number </h4>
-        <p><%=@current_personal_info["phone_number"]%></p>
+        <% unless @current_personal_info.nil? %>
+          <h4> Blog URL </h4>
+          <p><a href="<%= @current_personal_info["blog_url"] %>"><%=@current_personal_info["blog_url"]%></a></p>
+        <% end %>
+        <% unless @current_personal_info.nil? %>
+          <h4> Phone Number </h4>
+          <p><%= @current_personal_info["phone_number"] %></p>
+        <% end %>
         <h4> Email Address </h4>
         <p><%= @current_profile["email"] %></p>
         <h4> Github </h4>
         <p>@<%= @current_profile["username"] %></p>
-        <h4>  Twitter </h4>
-        <p><%=@current_personal_info["twitter"]%></p>
+        <% unless @current_personal_info.nil? %>
+          <h4>  Twitter </h4>
+          <p>@<%= @current_personal_info["twitter"] %></p>
+        <% end %>
       </div>
     </div>
   </div>
 
   <!-- Right hand section of the page -->
   <div class="large-8 columns">
-    <h1>Current Status: <span class="button [tiny small large]"  ><%= @current_status["status"] %></span></h1>
+    <table>
+      <tr>
+        <td><h3>Current Status:</h3></td>
+        <% if @current_status["status"] == "In The Zone" %>
+          <td width="420"><span class="button small alert"><%= @current_status["status"] %></span></td>
+        <% elsif @current_status["status"] == "Ready To Pair" %>
+          <td width="420"><span class="button small success"><%= @current_status["status"] %></span></td>
+        <% elsif @current_status["status"] == "Open To Help" %>
+          <td width="420"><span class="button small secondary"><%= @current_status["status"] %></span></td>
+        <% else %>
+          <td width="420"><span class="button small"><%= @current_status["status"] %></span></td>
+        <% end %>
+     </tr>
+     <tr>
+       <td><h3>Current Project:</h3></td>
+       <td width="424"><span class="button small secondary"><%= @current_project["project"] %></span></td>
+    </tr>
+    </table>
 
-    <%= erb :form %>
+    <% if session['user_id'] == params[:user_id] %>
+      <%= erb :form %>
+    <% end %>
     <h3> Ideas For My Breakable Toy <h3>
-    <p><%= @current_personal_info["breakable_toy"] %></p>
+    <% unless @current_personal_info.nil? %>
+      <p><%= @current_personal_info["breakable_toy"] %></p>
+    <% else %>
+      <p> When you get the chance please update your personal information so you can tell others a little bit about your breakable toy.  Feel free to explain things you might need help with so others who are working on a similar feature can find you.  The more collaboration we can create the better! </p>
+    <% end %>
 
     <h3> People You've Paired With </h3>
 

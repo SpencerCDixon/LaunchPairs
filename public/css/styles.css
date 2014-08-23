@@ -2,23 +2,20 @@
   background: #313131;
   width: 100%;
   height: 80px;
-  
-}
 
+}
 .tiny-img {
     border-radius: 200px;
     border: 1px solid white;
     height: 50px;
     width: 50px;
 }
-
 .large-img {
     border-radius: 6px;
     border: 1px solid white;
     height: 300px;
     width: 100%;
 }
-
 .personal-info {
   margin-top: 10px;
   border-top: 5px solid #333333;
@@ -33,7 +30,6 @@
   margin-top: 10%;
   text-align: center;
 }
-
 .login-button {
   margin-top: 20px;
   width: 70%;
@@ -45,7 +41,6 @@
 .button-container {
   text-align: center;
 }
-
 .button-index {
   width: 90%;
 }
@@ -54,3 +49,12 @@
 /* .happy-mood {
   border: 5px solid #0088B5;
 } */
+
+.top-bar {
+  height: 50px;
+}
+.logo {
+  margin-left: 40px;
+  height: 40px;
+  margin-top: 5px;
+}

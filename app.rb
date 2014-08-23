@@ -10,7 +10,9 @@ require 'pg'
 
 set :port, 9000
 
-## Configure Database & OmniAuth ##
+####################
+#Config DB & OAuth #
+####################
 configure do
   enable :sessions
   set :session_secret, ENV['SESSION_SECRET']
@@ -23,8 +25,9 @@ end
 configure :development do
   require 'pry'
 end
-
-# Connect to database
+####################
+## Connect to DB  ##
+####################
 def db_connection
   begin
     connection = PG.connect(dbname: 'sinatra_omniauth_dev')
@@ -75,17 +78,14 @@ def create_user(attr)
     INSERT INTO users (uid, provider, username, name, email, avatar_url)
     VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;
   }
-
   status = %{
   INSERT INTO status (user_id, status, created_at)
   VALUES ($1, 'Enter Your Status', now());
-}
-
+  }
   project = %{
     INSERT INTO projects (user_id, project, created_at)
     VALUES ($1, 'Sleeping', now());
   }
-
   personal_info = %{
     INSERT INTO personal_info (user_id, breakable_toy, phone_number, blog_url, twitter, linkedin, created_at) VALUES ($1, '', '', '', '', '', now())
   }
@@ -112,9 +112,9 @@ def authenticate!
     redirect '/'
   end
 end
-
-## Helpers ##
-
+####################
+###   Helpers    ###
+####################
 helpers do
   def signed_in?
     !current_user.nil?
@@ -141,7 +141,7 @@ helpers do
 
 end
 
-#### Status Methods #####
+#### Project Methods #####
 
 def update_project(userid, project)
   sql = "INSERT INTO projects (user_id, project, created_at) VALUES ($1, $2, now())"
@@ -158,8 +158,7 @@ def display_current_project(id)
   result.to_a.first
 end
 
-
-# changed "id" to "user_id"
+#### Status Methods #####
 def update_status(userid, status)
   sql = "INSERT INTO status (user_id, status, created_at) VALUES ($1, $2, now())"
   db_connection do |db|
@@ -167,7 +166,6 @@ def update_status(userid, status)
   end
 end
 
-# changed "id" to "user_id"
 def display_current_status(id)
   sql = "SELECT * FROM status WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1"
   result = db_connection do |db|
@@ -176,6 +174,8 @@ def display_current_status(id)
   result.to_a.first
 end
 
+
+#### Profile Methods #####
 def update_profile(id, breakable, phone, blog, twitter, linkedin)
   sql = 'INSERT INTO personal_info (user_id, breakable_toy, phone_number, blog_url, twitter, linkedin, created_at) VALUES ($1, $2, $3, $4, $5, $6, now())'
 
@@ -192,7 +192,9 @@ def display_current_personal_info(id)
   result.to_a.first
 end
 
-#### Routes ####
+####################
+####   Routes   ####
+####################
 
 get '/' do
   erb :login
@@ -223,23 +225,23 @@ end
 get '/profile/:user_id' do
   authenticate!
   @current_profile = find_user_by_id(params[:user_id])
-  @current_status = display_current_status(session['user_id'])
-  @current_project = display_current_project(session['user_id'])
-  @current_personal_info = display_current_personal_info(session['user_id'])
+  @current_status = display_current_status(@current_profile['id'])
+  @current_project = display_current_project(@current_profile['id'])
+  @current_personal_info = display_current_personal_info(@current_profile['id'])
   erb :profile
 end
 # Will update status for profile
 post '/profile/:user_id' do
   @users = all_users
   update_status(session['user_id'],params[:status])
-  redirect '/users'
+  redirect to("/profile/#{params[:user_id]}")
 end
 
 post '/profile/:user_id/projects' do
   @users = all_users
 
   update_project(session['user_id'],params[:project])
-  redirect '/users'
+  redirect to("/profile/#{params[:user_id]}")
 end
 
 ####################

@@ -10,21 +10,28 @@
   <tbody>
     <thead>
       <tr>
-        <th width="90">Mood</th>
-        <th width="200">Name</th>
-        <th width="200">Status</th>
-        <th width="500">Current Project</th>
-        <th width="100">Paired?</th>
+        <th width="90" style="text-align: center;">Mood</th>
+        <th width="200" style="text-align: center;">Name</th>
+        <th width="200" style="text-align: center;">Status</th>
+        <th width="500" style="text-align: center;">Current Project</th>
+        <th width="100" style="text-align: center;">Paired?</th>
       </tr>
     </thead>
     <% @users.each do |user| %>
     <tr>
       <td><img class="tiny-img happy-mood" src="<%= user['avatar_url'] %>"></td>
       <td><a href="/profile/<%= user['id'] %>"><%= user['name'] %></a></td>
-      <td class="button-container"><a href="#" class="button [tiny small large] button-index"><%=  show_current_status(user['id'])["status"] %></a></td>
-
-      <td class="button-container"><a href="#" class="button [tiny small large] button-index"><%=  show_current_project(user['id'])["project"] %></a></td>
-      <td><a href="#" class="button [tiny small large]">Paired</a></td>
+      <% if show_current_status(user['id'])["status"] == "In The Zone" %>
+        <td class="button-container"><a href="#" class="button small alert button-index"><%=  show_current_status(user['id'])["status"] %></a></td>
+      <% elsif show_current_status(user['id'])["status"] == "Ready To Pair" %>
+        <td class="button-container"><a href="#" class="button small success button-index"><%=  show_current_status(user['id'])["status"] %></a></td>
+      <% elsif show_current_status(user['id'])["status"] == "Open To Help" %>
+        <td class="button-container"><a href="#" class="button small secondary button-index"><%=  show_current_status(user['id'])["status"] %></a></td>
+      <% else %>
+        <td class="button-container"><a href="#" class="button small button-index"><%=  show_current_status(user['id'])["status"] %></a></td>
+      <% end %>
+      <td class="button-container"><div class="button secondary [tiny small large] button-index"><%=  show_current_project(user['id'])["project"] %></div></td>
+      <td><a href="#" class="button [tiny small large]">Paired?</a></td>
     </tr>
     <% end %>
   </tbody>
