@@ -220,6 +220,27 @@ def display_current_status(id)
   result.to_a.first
 end
 
+def find_all_available(users)
+  available_students = []
+  users.each do |user|
+    if display_current_status(user['id'])['status'] == "Ready To Pair"
+      available_students << user
+    end
+  end
+  available_students
+end
+
+def find_all_help(users)
+  available_students = []
+  users.each do |user|
+    if display_current_status(user['id'])['status'] == "Open To Help"
+      available_students << user
+    end
+  end
+  available_students
+end
+
+
 ##########################
 #### Profile Methods #####
 ##########################
@@ -293,6 +314,18 @@ get '/users' do
   erb :index
 end
 
+get '/users/available' do
+  authenticate!
+  @users = find_all_available(all_users)
+  erb :index
+end
+
+get '/users/help' do
+  authenticate!
+  @users = find_all_help(all_users)
+  erb :index
+end
+
 ####################
 ### Github Auth  ###
 ####################
@@ -318,7 +351,7 @@ get '/profile/:user_id' do
   @current_project = display_current_project(@current_profile['id'])
   @current_personal_info = display_current_personal_info(@current_profile['id'])
   @current_pairs = display_current_pairs(@current_profile['id'])
-  @percent_paired = percentage_paired(@users.size, (@current_pairs.size + 1))
+  @percent_paired = percentage_paired((@users.size - 1), @current_pairs.size)
   erb :profile
 end
 
@@ -326,14 +359,12 @@ post '/profile/:user_id' do
   authenticate!
   @users = all_users
   update_status(session['user_id'],params[:status])
-  flash[:success] = "Your status has been changed!"
   redirect to("/profile/#{params[:user_id]}")
 end
 
 post '/profile/:user_id/projects' do
   authenticate!
   @users = all_users
-  flash[:success] = "Your current project has been changed!"
   update_project(session['user_id'],params[:project])
   redirect to("/profile/#{params[:user_id]}")
 end
