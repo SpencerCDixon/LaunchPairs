@@ -148,7 +148,13 @@ h1, h2, h3, h4, h5, h6, a, p, span, div, button {
 }
 .top-bar-section ul li:hover:not(.has-form) > a {
   color: #a1d8fd;
-  border-bottom: 8px solid #a1d8fd;
+  border-bottom: 4px solid #a1d8fd;
+}
+.top-bar-section ul li {
+	border-right: 1px solid rgba(149,165,166,.5);
+}
+.top-bar-section ul li:first-child {
+	border-left: 1px solid rgba(149,165,166,.5);
 }
 /**********************************/
 /*        Profile Page            */

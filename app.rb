@@ -25,9 +25,11 @@ end
 configure :development do
   require 'pry'
 end
+
 ####################
 ## Connect to DB  ##
 ####################
+
 def db_connection
   begin
     connection = PG.connect(dbname: 'sinatra_omniauth_dev')
@@ -36,6 +38,10 @@ def db_connection
     connection.close
   end
 end
+
+##########################
+## User Create/Methods  ##
+##########################
 
 def user_from_omniauth(auth)
   {
@@ -112,9 +118,11 @@ def authenticate!
     redirect '/'
   end
 end
+
 ####################
 ###   Helpers    ###
 ####################
+
 helpers do
   def signed_in?
     !current_user.nil?
@@ -164,7 +172,9 @@ helpers do
   end
 end
 
+##########################
 #### Project Methods #####
+##########################
 
 def update_project(userid, project)
   sql = "INSERT INTO projects (user_id, project, created_at) VALUES ($1, $2, now())"
@@ -181,7 +191,20 @@ def display_current_project(id)
   result.to_a.first
 end
 
-#### Status Methods #####
+def search_users_by_project(users, query)
+  found_users = []
+  users.each do |user|
+    if display_current_project(user['id'])['project'].downcase.include?(query.downcase)
+      found_users << user
+    end
+  end
+  found_users
+end
+
+##########################
+#### Status Methods  #####
+##########################
+
 def update_status(userid, status)
   sql = "INSERT INTO status (user_id, status, created_at) VALUES ($1, $2, now())"
   db_connection do |db|
@@ -197,8 +220,10 @@ def display_current_status(id)
   result.to_a.first
 end
 
-
+##########################
 #### Profile Methods #####
+##########################
+
 def update_profile(id, breakable, phone, blog, twitter, linkedin)
   sql = 'INSERT INTO personal_info (user_id, breakable_toy, phone_number, blog_url, twitter, linkedin, created_at) VALUES ($1, $2, $3, $4, $5, $6, now())'
 
@@ -216,7 +241,10 @@ def display_current_personal_info(id)
   result.to_a.first
 end
 
+##########################
 #### Pairing Methods #####
+##########################
+
 def update_pair(user_id,pair_id)
   sql = 'INSERT INTO pairings (user_id, pair_id) VALUES ($1, $2)'
 
@@ -244,9 +272,9 @@ def percentage_paired(users, pairs)
   percent.to_f.round(2)
 end
 
-####################
-####   Routes   ####
-####################
+############################################################
+####                    Routes                          ####
+############################################################
 
 get '/' do
   erb :login
@@ -254,7 +282,12 @@ end
 
 get '/users' do
   authenticate!
-  @users = all_users
+  ## Will decide what users will be based on if there is a search ##
+  if params.key?("query")
+    @users = search_users_by_project(all_users, params[:query])
+  else
+    @users = all_users
+  end
   @current_status = display_current_status(session['user_id'])
 
   erb :index
@@ -273,7 +306,10 @@ get '/auth/github/callback' do
   redirect '/users'
 end
 
-# Shows profile
+####################
+#   Shows profile  #
+####################
+
 get '/profile/:user_id' do
   authenticate!
   @users = all_users.to_a
@@ -285,7 +321,7 @@ get '/profile/:user_id' do
   @percent_paired = percentage_paired(@users.size, (@current_pairs.size + 1))
   erb :profile
 end
-# Will update status for profile
+
 post '/profile/:user_id' do
   authenticate!
   @users = all_users
@@ -302,8 +338,9 @@ post '/profile/:user_id/projects' do
 end
 
 ####################
-### Profile Info ###
+### Edit Profile ###
 ####################
+
 get '/profile/:user_id/edit' do
   authenticate!
   erb :personal_info_form
@@ -316,6 +353,7 @@ post '/profile/:user_id/edit' do
 
   redirect to("/profile/#{params[:user_id]}")
 end
+
 ####################
 ###   Pairing    ###
 ####################
