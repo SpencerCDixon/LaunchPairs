@@ -326,13 +326,14 @@ post '/profile/:user_id' do
   authenticate!
   @users = all_users
   update_status(session['user_id'],params[:status])
+  flash[:success] = "Your status has been changed!"
   redirect to("/profile/#{params[:user_id]}")
 end
 
 post '/profile/:user_id/projects' do
   authenticate!
   @users = all_users
-
+  flash[:success] = "Your current project has been changed!"
   update_project(session['user_id'],params[:project])
   redirect to("/profile/#{params[:user_id]}")
 end
@@ -350,7 +351,7 @@ post '/profile/:user_id/edit' do
   authenticate!
 
   update_profile(session['user_id'],params[:breakable_toy],params[:phone_number], params[:blog_url], params[:twitter], params[:linkedin])
-
+  flash[:notice] = "Your personal information has been updated!"
   redirect to("/profile/#{params[:user_id]}")
 end
 
@@ -361,6 +362,7 @@ end
 post '/users/paired/:id' do
   authenticate!
   update_pair(session['user_id'],params[:id])
+  flash[:notice] = "You've added a new pair!"
   redirect '/users'
 end
 

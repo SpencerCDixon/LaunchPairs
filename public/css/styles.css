@@ -67,7 +67,7 @@ h1, h2, h3, h4, h5, h6, a, p, span, div, button {
 	border-radius: 8px;
 }
 
-.button.alert:hover {
+.button.alert:hover, div.alert-box.warning.radius {
 	background-color: #c0392b;
 }
 
@@ -75,7 +75,7 @@ h1, h2, h3, h4, h5, h6, a, p, span, div, button {
 	background-color: #27ae60;
 	border-radius: 8px;
 }
-.button.success:hover {
+.button.success:hover, div.alert-box.success.radius {
 	background-color: #27ae60;
 }
 
@@ -104,7 +104,7 @@ h1, h2, h3, h4, h5, h6, a, p, span, div, button {
 	margin-bottom: 0;
 	font-family: 'Ubuntu', sans-serif;
 }
-.button:hover {
+.button:hover, div.alert-box.info.radius {
 	background-color: #3498db;
 }
 

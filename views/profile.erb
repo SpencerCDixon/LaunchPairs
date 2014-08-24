@@ -22,6 +22,8 @@
         <% unless @current_personal_info.nil? %>
           <h4>  Twitter </h4>
           <p>@<%= @current_personal_info["twitter"] %></p>
+          <h4> LinkedIn </h4>
+          <p><a href="<%= @current_personal_info["linkedin"] %>">Visit Linked In</a></p>
         <% end %>
       </div>
     </div>
