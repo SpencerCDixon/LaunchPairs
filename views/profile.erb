@@ -1,80 +1,96 @@
 <p> </p>
-<div class="row">
-  <div class="large-12 columns">
-    <div data-alert class="alert-box info radius">
-      This is an alert box that will flash when things change.
-      <a href="#" class="close">&times;</a>
-    </div>
-  </div>
-</div>
 
 <div class="row">
-
   <!-- Left hand side of the page -->
   <div class="large-4 columns">
     <img class="large-img" src="<%= @current_profile["avatar_url"] %>">
     <div class="large-12 columns">
-      <h3 class="button large even" style="margin-top: 20px; width: 100%;"> Update Personal Info </h3>
+      <a href="/profile/<%= current_user['id'] %>/edit"><h3 class="button large even"> Update Personal Info </h3></a>
       <div class="personal-info">
-        <!-- <h4> Blog URL </h4>
-        <p><a href="http://www.cranberrycoder.com">Spencer's Blog </a></p> -->
-        <!-- <h4> Phone Number </h4>
-        <p>617-894-5641</p> -->
+        <% unless @current_personal_info.nil? %>
+          <h4> Blog URL </h4>
+          <p><a href="<%= @current_personal_info["blog_url"] %>"><%=@current_personal_info["blog_url"]%></a></p>
+        <% end %>
+        <% unless @current_personal_info.nil? %>
+          <h4> Phone Number </h4>
+          <p><%= @current_personal_info["phone_number"] %></p>
+        <% end %>
         <h4> Email Address </h4>
         <p><%= @current_profile["email"] %></p>
         <h4> Github </h4>
         <p>@<%= @current_profile["username"] %></p>
-        <!-- <h4>  Twitter </h4>
-        <p>@spencercdixon</p> -->
+        <% unless @current_personal_info.nil? %>
+          <h4>  Twitter </h4>
+          <p>@<%= @current_personal_info["twitter"] %></p>
+          <h4> LinkedIn </h4>
+          <p><a href="<%= @current_personal_info["linkedin"] %>">Visit Linked In</a></p>
+        <% end %>
       </div>
     </div>
   </div>
 
   <!-- Right hand section of the page -->
   <div class="large-8 columns">
-    <h1>Current Status: <span class="button [tiny small large]" ><%= @current_status["status"] %></span></h1>
+    <table>
+      <tr>
+        <td><h4>Current Status:</h4></td>
+        <!-- DISPLAY CORRECT COLOR STATUS -->
+        <% if @current_status["status"] == "In The Zone" %>
+          <td width="420"><span id="profile_status" class="button small alert"><%= @current_status["status"] %></span></td>
+        <% elsif @current_status["status"] == "Ready To Pair" %>
+          <td width="420"><span id="profile_status" class="button small success"><%= @current_status["status"] %></span></td>
+        <% elsif @current_status["status"] == "Open To Help" %>
+          <td width="420"><span id="profile_status" class="button small secondary"><%= @current_status["status"] %></span></td>
+        <% else %>
+          <td width="420"><span id="profile_status" class="button small"><%= @current_status["status"] %></span></td>
+        <% end %>
+     </tr>
 
-    <%= erb :form %>
-    <h3> Ideas For My Breakable Toy <h3>
-    <p> Morbi nec lorem at magna malesuada auctor. Suspendisse ultricies maximus sem, ut elementum tellus viverra et. Ut hendrerit lacinia risus, id porttitor arcu laoreet vel. Nunc augue nulla, rutrum ac eleifend eu, varius at nunc. Proin vitae augue gravida, mattis ligula sit amet, tincidunt justo. Nulla facilisi. Fusce sit amet dapibus libero. Mauris quis vestibulum ex. Donec convallis tempus vehicula. Donec facilisis, tortor non finibus vestibulum, augue nisl finibus dolor, nec malesuada eros metus id leo. </p>
-    <h3> Looking For Help With: <h3>
-    <ul class="square">
-      <li>Designing front end of my app</li>
-      <li>Finding a cool API that can do this</li>
-      <li>Figuring out what industry I want to work in</li>
-      <li>How to market my idea to recruiters</li>
-    </ul>
-
-    <h3> People You've Paired With </h3>
-
-    <table style="margin: 0 auto;">
-      <tbody>
-        <tr>
-          <td><img class="tiny-img" src="https://avatars.githubusercontent.com/u/7471018?v=2"></td>
-          <td>Spencer Dixon</td>
-          <td><a href="#" class="button [tiny small large]">Status</a></td>
-          <td><a href="#" class="button [tiny small large]">Current Project</a></td>
-          <td><a href="#" class="button [tiny small large]">Paired</a></td>
-        </tr>
-        <tr>
-          <td><img class="tiny-img" src="https://avatars.githubusercontent.com/u/7471018?v=2"></td>
-          <td>Spencer Dixon</td>
-          <td><a href="#" class="button [tiny small large]">Status</a></td>
-          <td><a href="#" class="button [tiny small large]">Current Project</a></td>
-          <td><a href="#" class="button [tiny small large]">Paired</a></td>
-        </tr>
-        <tr>
-          <td><img class="tiny-img" src="https://avatars.githubusercontent.com/u/7471018?v=2"></td>
-          <td>Spencer Dixon</td>
-          <td><a href="#" class="button [tiny small large]">Status</a></td>
-          <td><a href="#" class="button [tiny small large]">Current Project</a></td>
-          <td><a href="#" class="button [tiny small large]">Paired</a></td>
-        </tr>
-      </tbody>
+     <tr>
+       <td><h4>Current Project:</h4></td>
+       <td width="420"><span id="profile_project" class="button small project"><%= @current_project["project"] %></span></td>
+    </tr>
     </table>
-    <h5> 10% of people paired with</h5>
-    <div class="progress">
-      <span class="meter" style="width: 10%;"></span>
+
+    <% if session['user_id'] == params[:user_id] %>
+      <%= erb :form %>
+    <% end %>
+    <h3> Ideas For My Breakable Toy <h3>
+    <% unless @current_personal_info.nil? %>
+      <p><%= @current_personal_info["breakable_toy"] %></p>
+    <% else %>
+      <p> When you get the chance please update your personal information so you can tell others a little bit about your breakable toy.  Feel free to explain things you might need help with so others who are working on a similar feature can find you.  The more collaboration we can create the better! </p>
+    <% end %>
+
+    <h3> People Paired With </h3>
+    <% unless @current_pairs.empty? %>
+      <table style="margin: 0 auto;">
+        <tbody>
+          <% @current_pairs.each do |pair_id| %>
+          <tr>
+            <td width="90"><img class="tiny-img" src="<%= show_pair(@users, pair_id)["avatar_url"] %>"></td>
+            <td width="80"><%= show_pair(@users, pair_id)["name"] %></td>
+            <!-- DISPLAY CORRECT COLOR STATUS -->
+            <% if display_current_status(pair_id)['status'] == "In The Zone" %>
+              <td width="150"><div class="button tiny alert" style="width: 100%;"><%= display_current_status(pair_id)['status'] %> </div></td>
+            <% elsif display_current_status(pair_id)['status'] == "Ready To Pair" %>
+              <td width="150"><div class="button tiny success" style="width: 100%;"><%= display_current_status(pair_id)['status'] %> </div></td>
+            <% elsif display_current_status(pair_id)['status'] == "Open To Help" %>
+              <td width="150"><div class="button tiny secondary" style="width: 100%;"><%= display_current_status(pair_id)['status'] %> </div></td>
+            <% else %>
+              <td width="150"><div class="button tiny" style="width: 100%;"><%= display_current_status(pair_id)['status'] %> </div></td>
+            <% end %>
+
+            <td width="311"><div class="button tiny project" style="width: 100%;"><%= display_current_project(pair_id)['project'] %></div></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+
+    <h5>Paired With <%= (@percent_paired * 100).to_i %>% Of The Cohort</h5>
+    <div class="progress large round success">
+      <span class="meter" style="width: <%= @percent_paired * 100 %>%;"></span>
     </div>
   </div>
 </div>

@@ -1,19 +1,15 @@
-<!--
 <div class="row">
-  <div class="large-12 columns">
-
   <div class="panel login callout radius">
     <h1>Welcome to Launch Pairs</h1>
     <!-- <h2><em>Connecting Coders</em></h2> -->
-    <!-- <h3><em>Catchy tagline to explain point of app</em></h3> -->
-    <!-- <h2><em>Connecting Coders</em></h2> -->
-
-
-    <!-- <form action="/" method="post">
-      <input type="submit" value="Login With Github" class="button" style="width: 90%;margin-top: 30px;">
-    </form> -->
-    <!-- <a class="home_buttons" href="/users">View all the Users</a>
+    <h3><em>Catchy tagline to explain point of app</em></h3>
+    <% if signed_in? %>
+    <p>
+    You are currently signed in as <%= current_user['email'] %>!
+    <a href="/sign_out">Sign Out</a>
+    </p>
+    <% else %>
+    <a class="login-button button small button-index" href="/auth/github">Sign in with GitHub</a>
+    <% end %>
   </div>
-
-  </div>
-</div> -->
+</div>

@@ -1,6 +1,5 @@
--Decide on database configurations
--Create methods that populate databases and retrieve correct information when we need it.
--Make a view page for all users that allows current user to change their status.
--Create a personal profile page that can be edited when necessary
 -Create what other peoples profiles look like that you don't have access to
--
+-make it so you can't fill out someone else's status button/form only appears on your own profile
+-turn personal info into update section rather than insert
+-pair programming section
+-format blog URL so it doesn't break if someone enters w/out www. or https://
