@@ -46,7 +46,7 @@
 
      <tr>
        <td><h4>Current Project:</h4></td>
-       <td width="437"><span id="profile_project" class="button small project"><%= @current_project["project"] %></span></td>
+       <td width="420"><span id="profile_project" class="button small project"><%= @current_project["project"] %></span></td>
     </tr>
     </table>
 
@@ -61,29 +61,31 @@
     <% end %>
 
     <h3> People Paired With </h3>
+    <% unless @current_pairs.empty? %>
+      <table style="margin: 0 auto;">
+        <tbody>
+          <% @current_pairs.each do |pair_id| %>
+          <tr>
+            <td width="90"><img class="tiny-img" src="<%= show_pair(@users, pair_id)["avatar_url"] %>"></td>
+            <td width="80"><%= show_pair(@users, pair_id)["name"] %></td>
+            <!-- DISPLAY CORRECT COLOR STATUS -->
+            <% if display_current_status(pair_id)['status'] == "In The Zone" %>
+              <td width="150"><div class="button tiny alert" style="width: 100%;"><%= display_current_status(pair_id)['status'] %> </div></td>
+            <% elsif display_current_status(pair_id)['status'] == "Ready To Pair" %>
+              <td width="150"><div class="button tiny success" style="width: 100%;"><%= display_current_status(pair_id)['status'] %> </div></td>
+            <% elsif display_current_status(pair_id)['status'] == "Open To Help" %>
+              <td width="150"><div class="button tiny secondary" style="width: 100%;"><%= display_current_status(pair_id)['status'] %> </div></td>
+            <% else %>
+              <td width="150"><div class="button tiny" style="width: 100%;"><%= display_current_status(pair_id)['status'] %> </div></td>
+            <% end %>
 
-    <table style="margin: 0 auto;">
-      <tbody>
-        <% @current_pairs.each do |pair_id| %>
-        <tr>
-          <td width="90"><img class="tiny-img" src="<%= show_pair(@users, pair_id)["avatar_url"] %>"></td>
-          <td width="80"><%= show_pair(@users, pair_id)["name"] %></td>
-          <!-- DISPLAY CORRECT COLOR STATUS -->
-          <% if display_current_status(pair_id)['status'] == "In The Zone" %>
-            <td width="130"><div class="button tiny alert" style="width: 100%;"><%= display_current_status(pair_id)['status'] %> </div></td>
-          <% elsif display_current_status(pair_id)['status'] == "Ready To Pair" %>
-            <td width="130"><div class="button tiny success" style="width: 100%;"><%= display_current_status(pair_id)['status'] %> </div></td>
-          <% elsif display_current_status(pair_id)['status'] == "Open To Help" %>
-            <td width="130"><div class="button tiny secondary" style="width: 100%;"><%= display_current_status(pair_id)['status'] %> </div></td>
-          <% else %>
-            <td width="130"><div class="button tiny" style="width: 100%;"><%= display_current_status(pair_id)['status'] %> </div></td>
+            <td width="311"><div class="button tiny project" style="width: 100%;"><%= display_current_project(pair_id)['project'] %></div></td>
+          </tr>
           <% end %>
+        </tbody>
+      </table>
+    <% end %>
 
-          <td width="331"><div class="button tiny project" style="width: 100%;"><%= display_current_project(pair_id)['project'] %></div></td>
-        </tr>
-        <% end %>
-      </tbody>
-    </table>
     <h5>Paired With <%= (@percent_paired * 100).to_i %>% Of The Cohort</h5>
     <div class="progress large round success">
       <span class="meter" style="width: <%= @percent_paired * 100 %>%;"></span>

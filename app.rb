@@ -80,7 +80,7 @@ def create_user(attr)
   }
   status = %{
   INSERT INTO status (user_id, status, created_at)
-  VALUES ($1, 'Enter Your Status', now());
+  VALUES ($1, 'Enter Status', now());
   }
   project = %{
     INSERT INTO projects (user_id, project, created_at)
