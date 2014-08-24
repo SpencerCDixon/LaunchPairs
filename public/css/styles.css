@@ -1,3 +1,30 @@
+ /* experiment */
+body {
+	color: #222;
+	font-size: 100%;
+/* 	background: url(../img/space-bg.png) repeat-x fixed -80% 0;
+ */	background:
+		url(../img/stars-1.png) repeat-x fixed -130% 0,
+		url(../img/stars-2.png) repeat-x fixed 40% 0,
+		url(../img/space-bg.png) repeat-x fixed -80% 0;
+	background-color: #1a1a1a;
+}
+
+#wrapper {
+  width: 1000px;
+  margin: 40px auto;
+  padding: 10px;
+  background: #fff url(../img/bg-light.jpg) no-repeat 0 0;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  -webkit-box-shadow: 0 0 40px rgba(0,0,0,.7);
+  -moz-box-shadow: 0 0 40px rgba(0,0,0,.7);
+  box-shadow: 0 0 40px rgba(0,0,0,.7);
+}
+
+
+
 .custom-footer {
   background: #313131;
   width: 100%;
@@ -50,11 +77,29 @@
   border: 5px solid #0088B5;
 } */
 
+/***********/
+/* Nav Bar */
+/***********/
+
 .top-bar {
-  height: 50px;
+  height: 52px;
+  border-bottom: 6px solid #000;
+  border-top: 2px solid #FF69B4;
 }
 .logo {
   margin-left: 40px;
   height: 40px;
-  margin-top: 5px;
+  margin-top: 3px;
+}
+
+h1, h2, h3, h4, h5, h6, a, p, span, div, button {
+  font-family: 'Ubuntu', sans-serif;
+}
+.button {
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.top-bar-section ul li:hover:not(.has-form) > a {
+  color: #a1d8fd;
+  border-bottom: 8px solid #a1d8fd;
 }

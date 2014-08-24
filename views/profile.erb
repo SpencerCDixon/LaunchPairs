@@ -31,7 +31,7 @@
   <div class="large-8 columns">
     <table>
       <tr>
-        <td><h3>Current Status:</h3></td>
+        <td><h4>Current Status:</h4></td>
         <% if @current_status["status"] == "In The Zone" %>
           <td width="420"><span class="button small alert"><%= @current_status["status"] %></span></td>
         <% elsif @current_status["status"] == "Ready To Pair" %>
@@ -43,7 +43,7 @@
         <% end %>
      </tr>
      <tr>
-       <td><h3>Current Project:</h3></td>
+       <td><h4>Current Project:</h4></td>
        <td width="424"><span class="button small secondary"><%= @current_project["project"] %></span></td>
     </tr>
     </table>

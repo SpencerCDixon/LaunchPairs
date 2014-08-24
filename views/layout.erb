@@ -13,7 +13,7 @@
   <header>
   <%=  erb :nav %>
   </header>
-
+<div id="wrapper">
 <% if flash.any? %>
   <% if flash[:notice] %>
   <p></p>
@@ -55,6 +55,6 @@
   <footer>
     <%= erb :footer %>
   </footer>
-
+</div>
 </body>
 </html>
