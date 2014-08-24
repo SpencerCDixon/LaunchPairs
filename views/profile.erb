@@ -5,7 +5,7 @@
   <div class="large-4 columns">
     <img class="large-img" src="<%= @current_profile["avatar_url"] %>">
     <div class="large-12 columns">
-      <a href="/profile/<%= current_user['id'] %>/edit"><h3 class="button large even" style="margin-top: 20px; width: 100%;"> Update Personal Info </h3></a>
+      <a href="/profile/<%= current_user['id'] %>/edit"><h3 class="button large even"> Update Personal Info </h3></a>
       <div class="personal-info">
         <% unless @current_personal_info.nil? %>
           <h4> Blog URL </h4>
@@ -32,19 +32,21 @@
     <table>
       <tr>
         <td><h4>Current Status:</h4></td>
+        <!-- DISPLAY CORRECT COLOR STATUS -->
         <% if @current_status["status"] == "In The Zone" %>
-          <td width="420"><span class="button small alert"><%= @current_status["status"] %></span></td>
+          <td width="420"><span id="profile_status" class="button small alert"><%= @current_status["status"] %></span></td>
         <% elsif @current_status["status"] == "Ready To Pair" %>
-          <td width="420"><span class="button small success"><%= @current_status["status"] %></span></td>
+          <td width="420"><span id="profile_status" class="button small success"><%= @current_status["status"] %></span></td>
         <% elsif @current_status["status"] == "Open To Help" %>
-          <td width="420"><span class="button small secondary"><%= @current_status["status"] %></span></td>
+          <td width="420"><span id="profile_status" class="button small secondary"><%= @current_status["status"] %></span></td>
         <% else %>
-          <td width="420"><span class="button small"><%= @current_status["status"] %></span></td>
+          <td width="420"><span id="profile_status" class="button small"><%= @current_status["status"] %></span></td>
         <% end %>
      </tr>
+
      <tr>
        <td><h4>Current Project:</h4></td>
-       <td width="424"><span class="button small secondary"><%= @current_project["project"] %></span></td>
+       <td width="437"><span id="profile_project" class="button small project"><%= @current_project["project"] %></span></td>
     </tr>
     </table>
 
@@ -58,36 +60,33 @@
       <p> When you get the chance please update your personal information so you can tell others a little bit about your breakable toy.  Feel free to explain things you might need help with so others who are working on a similar feature can find you.  The more collaboration we can create the better! </p>
     <% end %>
 
-    <h3> People You've Paired With </h3>
+    <h3> People Paired With </h3>
 
     <table style="margin: 0 auto;">
       <tbody>
+        <% @current_pairs.each do |pair_id| %>
         <tr>
-          <td><img class="tiny-img" src="https://avatars.githubusercontent.com/u/7471018?v=2"></td>
-          <td>Spencer Dixon</td>
-          <td><a href="#" class="button [tiny small large]">Status</a></td>
-          <td><a href="#" class="button [tiny small large]">Current Project</a></td>
-          <td><a href="#" class="button [tiny small large]">Paired</a></td>
+          <td width="90"><img class="tiny-img" src="<%= show_pair(@users, pair_id)["avatar_url"] %>"></td>
+          <td width="80"><%= show_pair(@users, pair_id)["name"] %></td>
+          <!-- DISPLAY CORRECT COLOR STATUS -->
+          <% if display_current_status(pair_id)['status'] == "In The Zone" %>
+            <td width="130"><div class="button tiny alert" style="width: 100%;"><%= display_current_status(pair_id)['status'] %> </div></td>
+          <% elsif display_current_status(pair_id)['status'] == "Ready To Pair" %>
+            <td width="130"><div class="button tiny success" style="width: 100%;"><%= display_current_status(pair_id)['status'] %> </div></td>
+          <% elsif display_current_status(pair_id)['status'] == "Open To Help" %>
+            <td width="130"><div class="button tiny secondary" style="width: 100%;"><%= display_current_status(pair_id)['status'] %> </div></td>
+          <% else %>
+            <td width="130"><div class="button tiny" style="width: 100%;"><%= display_current_status(pair_id)['status'] %> </div></td>
+          <% end %>
+
+          <td width="331"><div class="button tiny project" style="width: 100%;"><%= display_current_project(pair_id)['project'] %></div></td>
         </tr>
-        <tr>
-          <td><img class="tiny-img" src="https://avatars.githubusercontent.com/u/7471018?v=2"></td>
-          <td>Spencer Dixon</td>
-          <td><a href="#" class="button [tiny small large]">Status</a></td>
-          <td><a href="#" class="button [tiny small large]">Current Project</a></td>
-          <td><a href="#" class="button [tiny small large]">Paired</a></td>
-        </tr>
-        <tr>
-          <td><img class="tiny-img" src="https://avatars.githubusercontent.com/u/7471018?v=2"></td>
-          <td>Spencer Dixon</td>
-          <td><a href="#" class="button [tiny small large]">Status</a></td>
-          <td><a href="#" class="button [tiny small large]">Current Project</a></td>
-          <td><a href="#" class="button [tiny small large]">Paired</a></td>
-        </tr>
+        <% end %>
       </tbody>
     </table>
-    <h5> 10% of people paired with</h5>
-    <div class="progress">
-      <span class="meter" style="width: 10%;"></span>
+    <h5>Paired With <%= (@percent_paired * 100).to_i %>% Of The Cohort</h5>
+    <div class="progress large round success">
+      <span class="meter" style="width: <%= @percent_paired * 100 %>%;"></span>
     </div>
   </div>
 </div>

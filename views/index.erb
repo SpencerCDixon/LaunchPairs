@@ -3,7 +3,7 @@
     <h1>All Launchers</h1>
   </div>
 </div>
-  
+
 <div class="row">
 <div class="large-12 columns">
 
@@ -31,8 +31,12 @@
       <% else %>
         <td class="button-container"><a href="#" class="button small button-index"><%=  show_current_status(user['id'])["status"] %></a></td>
       <% end %>
-      <td class="button-container"><div class="button secondary [tiny small large] button-index"><%=  show_current_project(user['id'])["project"] %></div></td>
-      <td><a href="#" class="button [tiny small large]">Paired?</a></td>
+      <td class="button-container"><div class="button project [tiny small large] button-index"><%=  show_current_project(user['id'])["project"] %></div></td>
+      <% if paired?(session['user_id'],user['id']) || session['user_id'] == user['id'] %>
+        <td class="button-container"><div class="button complete tiny  button-index">Complete</div></td>
+      <% else %>
+        <td class="button-container"><form action="/users/paired/<%= user['id'] %>" method="post"> <input class="button paired small" type="submit" value="Paired?"> </form></td>
+      <% end %>
     </tr>
     <% end %>
   </tbody>

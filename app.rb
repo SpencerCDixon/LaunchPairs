@@ -131,6 +131,7 @@ helpers do
     end
     result.to_a.first
   end
+
   def show_current_project(id)
     sql = "SELECT * FROM projects WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1"
     result = db_connection do |db|
@@ -139,6 +140,28 @@ helpers do
     result.to_a.first
   end
 
+  def paired?(person1, person2)
+    sql = "SELECT * FROM pairings WHERE (user_id = $1 AND pair_id = $2) OR (user_id = $2 AND pair_id = $1)"
+    result = db_connection do |db|
+      db.exec_params(sql, [person1, person2])
+    end
+
+    if result.to_a.empty?
+      false
+    else
+      true
+    end
+  end
+
+  def show_pair(all_users,pair_id)
+    current_pair = []
+    all_users.each do |user|
+      if user['id'] == pair_id
+        current_pair << user
+      end
+    end
+    current_pair.first
+  end
 end
 
 #### Project Methods #####
@@ -181,15 +204,44 @@ def update_profile(id, breakable, phone, blog, twitter, linkedin)
 
   db_connection do |db|
     db.exec(sql,[id, breakable, phone, blog, twitter, linkedin])
-    end
+  end
 end
 
 def display_current_personal_info(id)
   sql = "SELECT * FROM personal_info WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1"
-    result = db_connection do |db|
-      db.exec_params(sql, [id])
-    end
+
+  result = db_connection do |db|
+    db.exec_params(sql, [id])
+  end
   result.to_a.first
+end
+
+#### Pairing Methods #####
+def update_pair(user_id,pair_id)
+  sql = 'INSERT INTO pairings (user_id, pair_id) VALUES ($1, $2)'
+
+  db_connection do |db|
+    db.exec(sql,[user_id,pair_id])
+  end
+end
+
+def display_current_pairs(id)
+  sql = "SELECT * FROM pairings WHERE user_id = $1 OR pair_id = $1"
+  array_of_pairs = []
+  result = db_connection do |db|
+    db.exec_params(sql, [id])
+  end
+  result.to_a.each do |pair_combo|
+    if pair_combo['pair_id'] != id
+      array_of_pairs << pair_combo['pair_id']
+    end
+  end
+  array_of_pairs
+end
+
+def percentage_paired(users, pairs)
+  percent = pairs.to_f / users.to_f
+  percent.to_f.round(2)
 end
 
 ####################
@@ -224,20 +276,25 @@ end
 # Shows profile
 get '/profile/:user_id' do
   authenticate!
+  @users = all_users.to_a
   @current_profile = find_user_by_id(params[:user_id])
   @current_status = display_current_status(@current_profile['id'])
   @current_project = display_current_project(@current_profile['id'])
   @current_personal_info = display_current_personal_info(@current_profile['id'])
+  @current_pairs = display_current_pairs(@current_profile['id'])
+  @percent_paired = percentage_paired(@users.size, (@current_pairs.size + 1))
   erb :profile
 end
 # Will update status for profile
 post '/profile/:user_id' do
+  authenticate!
   @users = all_users
   update_status(session['user_id'],params[:status])
   redirect to("/profile/#{params[:user_id]}")
 end
 
 post '/profile/:user_id/projects' do
+  authenticate!
   @users = all_users
 
   update_project(session['user_id'],params[:project])
@@ -248,20 +305,33 @@ end
 ### Profile Info ###
 ####################
 get '/profile/:user_id/edit' do
+  authenticate!
   erb :personal_info_form
 end
 
 post '/profile/:user_id/edit' do
+  authenticate!
 
   update_profile(session['user_id'],params[:breakable_toy],params[:phone_number], params[:blog_url], params[:twitter], params[:linkedin])
 
   redirect to("/profile/#{params[:user_id]}")
 end
 ####################
+###   Pairing    ###
+####################
+
+post '/users/paired/:id' do
+  authenticate!
+  update_pair(session['user_id'],params[:id])
+  redirect '/users'
+end
+
+
+####################
 ### Signing Out  ###
 ####################
 get '/sign_out' do
   session.clear
-  flash[:notice] = 'See ya! I hope you had an enjoyable pairing experience.'
+  flash[:notice] = 'Have a great day! We hope you had an enjoyable pairing experience.'
   redirect '/'
 end
