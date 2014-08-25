@@ -374,6 +374,13 @@ end
 post '/profile/:user_id' do
   authenticate!
   @users = all_users
+
+  @user = find_user_by_id(params[:id])
+
+  flow = Flowdock::Flow.new(:api_token => ENV['FLOW_DOCK'],
+  :source => "LaunchPairs", :from => {:name => @user["name"], :address => @user["email"]})
+  flow.push_to_chat(:content => "/#{params[:status]}", :external_user_name => @user['name'].gsub!(/\s/, ""))
+
   update_status(session['user_id'],params[:status])
   redirect to("/profile/#{params[:user_id]}")
 end
