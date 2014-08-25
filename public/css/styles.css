@@ -123,6 +123,9 @@ h1, h2, h3, h4, h5, h6, a, p, span, div, button {
 	background-color: #34495e;
 }
 
+#complete {
+	margin-left: 0;
+}
 
 /**********************************/
 /* Styles For Moods(coming soon0) */
