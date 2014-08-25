@@ -375,7 +375,7 @@ post '/profile/:user_id' do
   authenticate!
   @users = all_users
 
-  @user = find_user_by_id(params[:id])
+  @user = find_user_by_id(params[:user_id])
 
   flow = Flowdock::Flow.new(:api_token => ENV['FLOW_DOCK'],
   :source => "LaunchPairs", :from => {:name => @user["name"], :address => @user["email"]})
