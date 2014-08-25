@@ -382,7 +382,7 @@ post '/profile/:user_id/projects' do
   authenticate!
   @users = all_users
   if params[:project].include?("<") || params[:project].include?(">") || params[:project].include?(";")
-    flash[:notice] = "stop tryign to hack"
+    flash[:notice] = "Stop trying to hack the site! ;)"
     redirect back
   else
     project = params[:project]
