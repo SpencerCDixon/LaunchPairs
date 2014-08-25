@@ -8,6 +8,17 @@ require 'omniauth-github'
 require 'pg'
 require 'flowdock'
 
+# helpers do
+#   def status_tag(status)
+#     status_map = {
+#       'Open for Help' => 'success'
+#     }
+#     classes = ['button', 'somethiong', status_map[status]].join
+#     h("<a href=asdasd class='#{status_map[status]}'>")
+#     content_tag(:a, text: 'Something', class: 'someting else')
+#   end
+# end
+
 ####################
 #Config DB & OAuth #
 ####################
@@ -173,6 +184,10 @@ helpers do
     else
       true
     end
+  end
+
+  def h(text)
+    Rack::Utils.escape_html(text)
   end
 
   def show_pair(all_users,pair_id)
