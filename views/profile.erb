@@ -4,28 +4,28 @@
   <!-- Left hand side of the page -->
   <div class="large-4 columns">
     <img class="large-img" src="<%= @current_profile["avatar_url"] %>">
-    <div class="large-12 columns">
-      <a href="/profile/<%= current_user['id'] %>/edit"><h3 class="button large even"> Update Personal Info </h3></a>
-      <div class="personal-info">
-        <% unless @current_personal_info.nil? %>
-          <h4> Blog URL </h4>
-          <p><a href="<%= @current_personal_info["blog_url"] %>"><%=@current_personal_info["blog_url"]%></a></p>
-        <% end %>
-        <% unless @current_personal_info.nil? %>
-          <h4> Phone Number </h4>
-          <p><%= @current_personal_info["phone_number"] %></p>
-        <% end %>
-        <h4> Email Address </h4>
-        <p><%= @current_profile["email"] %></p>
-        <h4> Github </h4>
-        <p>@<%= @current_profile["username"] %></p>
-        <% unless @current_personal_info.nil? %>
-          <h4>  Twitter </h4>
-          <p>@<%= @current_personal_info["twitter"] %></p>
-          <h4> LinkedIn </h4>
-          <p><a href="http://<%= @current_personal_info["linkedin"] %>">Visit Linked In</a></p>
-        <% end %>
-      </div>
+      <div class="large-12 columns">
+        <a href="/profile/<%= current_user['id'] %>/edit"><h3 class="button large even"> Update Personal Info </h3></a>
+        <div class="personal-info">
+          <% unless @current_personal_info.nil? %>
+            <h4> Blog URL </h4>
+            <p><a href="<%= @current_personal_info["blog_url"] %>"><%=@current_personal_info["blog_url"]%></a></p>
+          <% end %>
+          <% unless @current_personal_info.nil? %>
+            <h4> Phone Number </h4>
+            <p><%= @current_personal_info["phone_number"] %></p>
+          <% end %>
+          <h4> Email Address </h4>
+          <p><%= @current_profile["email"] %></p>
+          <h4> Github </h4>
+          <p>@<%= @current_profile["username"] %></p>
+          <% unless @current_personal_info.nil? %>
+            <h4>  Twitter </h4>
+            <p>@<%= @current_personal_info["twitter"] %></p>
+            <h4> LinkedIn </h4>
+            <p><a href="http://<%= @current_personal_info["linkedin"] %>">Visit Linked In</a></p>
+          <% end %>
+        </div>
     </div>
   </div>
 

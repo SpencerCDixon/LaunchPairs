@@ -8,8 +8,6 @@ require 'omniauth-github'
 require 'pg'
 require 'flowdock'
 
-
-
 ####################
 #Config DB & OAuth #
 ####################
@@ -74,7 +72,6 @@ end
 def find_or_create_user(attr)
   find_user_by_uid(attr[:uid]) || create_user(attr)
 end
-
 
 def find_user_by_uid(uid)
   sql = 'SELECT * FROM users WHERE uid = $1 LIMIT 1'
@@ -196,7 +193,7 @@ end
 def update_project(userid, project)
   sql = "INSERT INTO projects (user_id, project, created_at) VALUES ($1, $2, now())"
   db_connection do |db|
-    db.exec(sql,[userid, project])
+    db.exec_params(sql,[userid, project])
   end
 end
 
@@ -256,7 +253,6 @@ def find_all_help(users)
   end
   available_students
 end
-
 
 ##########################
 #### Profile Methods #####
@@ -348,6 +344,7 @@ end
 ####################
 ### Github Auth  ###
 ####################
+
 get '/auth/github/callback' do
   auth = env['omniauth.auth']
   user_attributes = user_from_omniauth(auth)
