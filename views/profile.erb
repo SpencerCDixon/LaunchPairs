@@ -63,7 +63,7 @@
     <% end %>
 
     <h3> People Paired With </h3>
-    <% if @current_pairs.empty? %>
+    <% if !@current_pairs.empty? %>
       <table style="margin: 0 auto;">
         <tbody>
           <% @current_pairs.each do |pair_id| %>
