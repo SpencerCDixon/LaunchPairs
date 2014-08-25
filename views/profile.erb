@@ -9,16 +9,16 @@
         <div class="personal-info">
           <% unless @current_personal_info.nil? %>
             <h4> Blog URL </h4>
-            <p><a href="<%= @current_personal_info["blog_url"] %>"><%=@current_personal_info["blog_url"]%></a></p>
+            <p><a href="<%= @current_personal_info["blog_url"] %>"><%=h(@current_personal_info["blog_url"])%></a></p>
           <% end %>
           <% unless @current_personal_info.nil? %>
             <h4> Phone Number </h4>
-            <p><%= @current_personal_info["phone_number"] %></p>
+            <p><%= h(@current_personal_info["phone_number"]) %></p>
           <% end %>
           <h4> Email Address </h4>
-          <p><%= @current_profile["email"] %></p>
+          <p><%= h(@current_profile["email"]) %></p>
           <h4> Github </h4>
-          <p>@<%= @current_profile["username"] %></p>
+          <p>@<%= h(@current_profile["username"]) %></p>
           <% unless @current_personal_info.nil? %>
             <h4>  Twitter </h4>
             <p>@<%= @current_personal_info["twitter"] %></p>

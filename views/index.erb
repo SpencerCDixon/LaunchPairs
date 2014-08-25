@@ -52,17 +52,17 @@
               </a>
             </td>
           <% elsif show_current_status(user['id'])["status"] == "Ready To Pair" %>
-            <td class="button-container"><a href="#" class="button small success button-index"><%=  h show_current_status(user['id'])["status"] %></a></td>
+            <td class="button-container"><a href="#" class="button small success button-index"><%=  h(show_current_status(user['id'])["status"]) %></a></td>
           <% elsif show_current_status(user['id'])["status"] == "Open To Help" %>
-            <td class="button-container"><a href="#" class="button small secondary button-index"><%=  h show_current_status(user['id'])["status"] %></a></td>
+            <td class="button-container"><a href="#" class="button small secondary button-index"><%=  h(show_current_status(user['id'])["status"]) %></a></td>
           <% else %>
-            <td class="button-container"><a href="#" class="button small button-index"><%=  h show_current_status(user['id'])["status"] %></a></td>
+            <td class="button-container"><a href="#" class="button small button-index"><%=  h(show_current_status(user['id'])["status"]) %></a></td>
           <% end %>
-          <td class="button-container"><div class="button project [tiny small large] button-index"><%=  h show_current_project(user['id'])["project"] %></div></td>
+          <td class="button-container"><div class="button project [tiny small large] button-index"><%=  h(show_current_project(user['id'])["project"]) %></div></td>
           <% if paired?(session['user_id'],user['id']) || session['user_id'] == user['id'] %>
             <td class="button-container"><div class="button complete tiny  button" >Complete</div></td>
           <% else %>
-            <td class="button-container"><form action="/users/paired/<%= user['id'] %>" method="post"> <input id="complete" class="button paired small" type="submit" value="Paired?"> </form></td>
+            <td class="button-container"><form action="/users/paired/<%= h(user['id']) %>" method="post"> <input id="complete" class="button paired small" type="submit" value="Paired?"> </form></td>
           <% end %>
         </tr>
         <% end %>

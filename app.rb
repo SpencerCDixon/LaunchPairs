@@ -409,7 +409,7 @@ post '/profile/:user_id/projects' do
   else
     project = params[:project]
   end
-  update_project(session['user_id'],project)
+  update_project(session['user_id'],h(project))
   redirect to("/profile/#{params[:user_id]}")
 end
 
