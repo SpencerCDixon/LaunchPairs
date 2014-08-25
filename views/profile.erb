@@ -9,7 +9,7 @@
         <div class="personal-info">
           <% unless @current_personal_info.nil? %>
             <h4> Blog URL </h4>
-            <p><a href="<%= @current_personal_info["blog_url"] %>"><%=h(@current_personal_info["blog_url"])%></a></p>
+            <p><a href="https://<%= @current_personal_info["blog_url"] %>"><%=h(@current_personal_info["blog_url"])%></a></p>
           <% end %>
           <% unless @current_personal_info.nil? %>
             <h4> Phone Number </h4>
@@ -23,7 +23,7 @@
             <h4>  Twitter </h4>
             <p>@<%= @current_personal_info["twitter"] %></p>
             <h4> LinkedIn </h4>
-            <p><a href="http://<%= @current_personal_info["linkedin"] %>">Visit Linked In</a></p>
+            <p><a href="http://www.linkedin.com/in/<%= @current_personal_info["linkedin"] %>">Visit Linked In</a></p>
           <% end %>
         </div>
     </div>
