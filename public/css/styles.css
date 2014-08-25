@@ -109,12 +109,12 @@ h1, h2, h3, h4, h5, h6, a, p, span, div, button {
 }
 
 .button.complete {
-	background-color: #34495e;
+	background-color: #8e44ad;
 	border-radius: 8px;
 }
 
 .button.paired {
-	background-color: #8e44ad;
+	background-color: #9b59b6;
 	border-radius: 8px;
 	margin-top: auto auto;
 
