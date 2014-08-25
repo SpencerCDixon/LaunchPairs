@@ -418,13 +418,21 @@ post '/profile/:id/message' do
   redirect to("/profile/#{params[:id]}")
 end
 
-
-
 ####################
 ### Signing Out  ###
 ####################
+
 get '/sign_out' do
   session.clear
   flash[:notice] = 'Have a great day! We hope you had an enjoyable pairing experience.'
   redirect '/'
+end
+
+####################
+###     404      ###
+####################
+
+not_found do
+  status 404
+  erb :oops
 end

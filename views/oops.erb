@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="large-8 large-offset-2 columns">
+    <div class="panel login callout radius">
+      <h1>Oh know!</h1>
+      <h2><em>Some Kind Of Error</em></h2>
+      <% if signed_in? %>
+      <p>
+      You are currently signed in as <%= current_user['email'] %>!
+      <a href="/sign_out">Sign Out</a>
+      </p>
+      <% else %>
+      <a class="login-button button small button-index" href="/auth/github">Sign in with GitHub</a>
+      <% end %>
+      <a class= "button" href="/users">Return Home</a>
+    </div>
+  </div>
+</div>
