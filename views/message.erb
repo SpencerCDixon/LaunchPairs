@@ -1,0 +1,19 @@
+<div class="row">
+  <div class="large-12 columns">
+    <h1> Send A Flow </h1>
+    <form action="/profile/<%=current_user["id"]%>/message" method="post">
+      <div class="row">
+        <div class="large-12 columns">
+          <label>Message To Flow:
+            <textarea name="flow_message" placeholder=""></textarea>
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="small-4 small-offset-8 columns" >
+          <input class="button small" type="submit" value="Send Message"/>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

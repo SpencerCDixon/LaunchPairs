@@ -7,6 +7,7 @@ require 'sinatra/reloader'
 require 'sinatra/flash'
 require 'omniauth-github'
 require 'pg'
+require 'flowdock'
 
 set :port, 9000
 
@@ -396,6 +397,27 @@ post '/users/paired/:id' do
   flash[:notice] = "You've added a new pair!"
   redirect '/users'
 end
+
+####################
+###   Flowdock   ###
+####################
+
+get '/profile/:id/message' do
+  erb :message
+end
+
+post '/profile/:id/message' do
+  @user = find_user_by_id(params[:id])
+  binding.pry
+  flow = Flowdock::Flow.new(:api_token => "065657f5be4988721d4f46caddbf5819",
+  :source => "LaunchPairs", :from => {:name => @user["name"], :address => @user["email"]})
+
+  flow.push_to_chat(:content => params[:flow_message], :external_user_name => "spencercdixon")
+
+  flash[:success] = "Your message was sent."
+  redirect to("/profile/#{params[:id]}")
+end
+
 
 
 ####################

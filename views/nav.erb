@@ -11,6 +11,7 @@
   <section class="top-bar-section">
     <ul class="right">
       <% if signed_in? %>
+      <li class=""><a href="/profile/<%= current_user['id'] %>/message">Send Flow</a></li>
       <li class=""><a href="/users/available">Find Pair</a></li>
       <li class=""><a href="/users/help">Find Help</a></li>
       <li class=""><a href="/users">All Students</a></li>
