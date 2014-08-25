@@ -381,7 +381,13 @@ end
 post '/profile/:user_id/projects' do
   authenticate!
   @users = all_users
-  update_project(session['user_id'],params[:project])
+  if params[:project].include?("<") || params[:project].include?(">") || params[:project].include?(";")
+    flash[:notice] = "stop tryign to hack"
+    redirect back
+  else
+    project = params[:project]
+  end
+  update_project(session['user_id'],project)
   redirect to("/profile/#{params[:user_id]}")
 end
 
