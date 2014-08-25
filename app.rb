@@ -328,7 +328,7 @@ end
 ############################################################
 
 get '/' do
-  erb :login
+  erb :login, :escape_html => true
 end
 
 get '/users' do
@@ -341,19 +341,19 @@ get '/users' do
   end
   @current_status = display_current_status(session['user_id'])
 
-  erb :index
+  erb :index, :escape_html => true
 end
 
 get '/users/available' do
   authenticate!
   @users = find_all_available(all_users)
-  erb :index
+  erb :index, :escape_html => true
 end
 
 get '/users/help' do
   authenticate!
   @users = find_all_help(all_users)
-  erb :index
+  erb :index, :escape_html => true
 end
 
 ####################
@@ -383,7 +383,7 @@ get '/profile/:user_id' do
   @current_personal_info = display_current_personal_info(@current_profile['id'])
   @current_pairs = display_current_pairs(@current_profile['id'])
   @percent_paired = percentage_paired((@users.size - 1), @current_pairs.size)
-  erb :profile
+  erb :profile, :escape_html => true
 end
 
 post '/profile/:user_id' do
@@ -419,7 +419,7 @@ end
 
 get '/profile/:user_id/edit' do
   authenticate!
-  erb :personal_info_form
+  erb :personal_info_form, :escape_html => true
 end
 
 post '/profile/:user_id/edit' do
@@ -446,7 +446,7 @@ end
 ####################
 
 get '/profile/:id/message' do
-  erb :message
+  erb :message, :escape_html => true
 end
 
 post '/profile/:id/message' do
@@ -477,5 +477,5 @@ end
 
 not_found do
   status 404
-  erb :oops
+  erb :oops, :escape_html => true
 end
