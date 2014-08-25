@@ -300,6 +300,8 @@ def display_current_pairs(id)
   result.to_a.each do |pair_combo|
     if pair_combo['pair_id'] != id
       array_of_pairs << pair_combo['pair_id']
+    elsif pair_combo['user_id'] != id
+      array_of_pairs << pair_combo['user_id']
     end
   end
   array_of_pairs
