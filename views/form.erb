@@ -1,3 +1,4 @@
+
 <div class="panel callout radius">
   <form action="/profile/<%= current_user['id'] %>" method="post">
   <div class="row">
@@ -11,7 +12,11 @@
           </select>
         </div>
         <div class="small-2 columns">
+          <% if current_user['id'] == 26 %>
+            <a href="/josh" class="button postfix">Change</a>
+          <% else %>
           <input class="button postfix" type="submit" value="Change">
+          <% end %>
         </div>
       </div>
     </div>
