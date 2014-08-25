@@ -455,7 +455,14 @@ post '/profile/:id/message' do
   flow = Flowdock::Flow.new(:api_token => ENV['FLOW_DOCK'],
   :source => "LaunchPairs", :from => {:name => @user["name"], :address => @user["email"]})
 
-  flow.push_to_chat(:content => params[:flow_message], :external_user_name => @user['name'].gsub!(/\s/, ""))
+  if params[:flow_message].include?("<") || params[:flow_message].include?(">") || params[:flow_message].include?(";")
+    flash[:notice] = "Stop trying to hack the site! ;)"
+    redirect back
+  else
+    project = params[:flow_message]
+  end
+
+  flow.push_to_chat(:content => project, :external_user_name => @user['name'].gsub!(/\s/, ""))
 
   flash[:success] = "Your message was sent."
   redirect to("/profile/#{params[:id]}")
