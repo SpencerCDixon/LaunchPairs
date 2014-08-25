@@ -391,7 +391,7 @@ post '/profile/:user_id' do
   @users = all_users
 
   @user = find_user_by_id(params[:user_id])
-  if !(params[:status] == "Ready To Pair") || !(params[:status] == "In The Zone") || !(params[:status] == "Open To Help")
+  if (params[:status] != "Ready To Pair") || (params[:status] != "In The Zone") || (params[:status] != "Open To Help")
     flash[:notice] = "Stop trying to hack the site! ;)"
     redirect back
   else
