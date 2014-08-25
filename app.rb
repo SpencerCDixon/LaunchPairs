@@ -391,12 +391,16 @@ post '/profile/:user_id' do
   @users = all_users
 
   @user = find_user_by_id(params[:user_id])
-
+  if !(params[:status] == "Ready To Pair") || !(params[:status] == "In The Zone") || !(params[:status] == "Open To Help")
+    flash[:notice] = "Stop trying to hack the site! ;)"
+    redirect back
+  else
+    update_status(session['user_id'],params[:status])
+  end
   flow = Flowdock::Flow.new(:api_token => ENV['FLOW_DOCK'],
   :source => "LaunchPairs", :from => {:name => @user["name"], :address => @user["email"]})
   flow.push_to_chat(:content => "/status #{params[:status]}", :external_user_name => @user['name'].gsub!(/\s/, ""))
 
-  update_status(session['user_id'],params[:status])
   redirect to("/profile/#{params[:user_id]}")
 end
 
