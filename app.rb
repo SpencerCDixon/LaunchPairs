@@ -3,13 +3,12 @@ require 'dotenv'
 Dotenv.load
 
 require 'sinatra'
-require 'sinatra/reloader'
 require 'sinatra/flash'
 require 'omniauth-github'
 require 'pg'
 require 'flowdock'
 
-set :port, 9000
+
 
 ####################
 #Config DB & OAuth #
@@ -23,8 +22,25 @@ configure do
   end
 end
 
+def production_database_config
+  db_url_parts = ENV['DATABASE_URL'].split(/\/|:|@/)
+
+  {
+    user: db_url_parts[3],
+    password: db_url_parts[4],
+    host: db_url_parts[5],
+    dbname: db_url_parts[7]
+  }
+end
+
 configure :development do
   require 'pry'
+  set :port, 9000
+  set :database_config, { dbname: 'sinatra_omniauth_dev' }
+end
+
+configure :production do
+  set :database_config, production_database_config
 end
 
 ####################
@@ -33,7 +49,7 @@ end
 
 def db_connection
   begin
-    connection = PG.connect(dbname: 'sinatra_omniauth_dev')
+    connection = PG.connect(settings.database_config)
     yield(connection)
   ensure
     connection.close
@@ -408,11 +424,11 @@ end
 
 post '/profile/:id/message' do
   @user = find_user_by_id(params[:id])
-  binding.pry
-  flow = Flowdock::Flow.new(:api_token => "065657f5be4988721d4f46caddbf5819",
+
+  flow = Flowdock::Flow.new(:api_token => ENV['FLOW_DOCK'],
   :source => "LaunchPairs", :from => {:name => @user["name"], :address => @user["email"]})
 
-  flow.push_to_chat(:content => params[:flow_message], :external_user_name => "spencercdixon")
+  flow.push_to_chat(:content => params[:flow_message], :external_user_name => @user['name'].gsub!(/\s/, ""))
 
   flash[:success] = "Your message was sent."
   redirect to("/profile/#{params[:id]}")

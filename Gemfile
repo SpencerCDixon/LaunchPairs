@@ -6,7 +6,5 @@ gem 'pg'
 gem 'sinatra-contrib'
 gem 'sinatra-flash'
 gem 'omniauth-github'
-
-group :development, :test do
-  gem 'dotenv'
-end
+gem 'flowdock'
+gem 'dotenv'

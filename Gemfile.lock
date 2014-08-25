@@ -7,7 +7,14 @@ GEM
     dotenv-deployment (0.0.2)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
+    flowdock (0.4.0)
+      httparty (~> 0.7)
+      multi_json
     hashie (2.1.1)
+    httparty (0.13.1)
+      json (~> 1.8)
+      multi_xml (>= 0.5.2)
+    json (1.8.1)
     jwt (1.0.0)
     multi_json (1.10.1)
     multi_xml (0.5.5)
@@ -55,6 +62,7 @@ PLATFORMS
 
 DEPENDENCIES
   dotenv
+  flowdock
   omniauth-github
   pg
   sinatra
