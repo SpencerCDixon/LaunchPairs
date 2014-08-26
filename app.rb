@@ -237,7 +237,7 @@ end
 def update_status(userid, status)
   sql = "INSERT INTO status (user_id, status, created_at) VALUES ($1, $2, now())"
   db_connection do |db|
-    db.exec(sql,[userid, status])
+    db.exec_params(sql,[userid, status])
   end
 end
 
@@ -277,7 +277,7 @@ def update_profile(id, breakable, phone, blog, twitter, linkedin)
   sql = 'INSERT INTO personal_info (user_id, breakable_toy, phone_number, blog_url, twitter, linkedin, created_at) VALUES ($1, $2, $3, $4, $5, $6, now())'
 
   db_connection do |db|
-    db.exec(sql,[id, breakable, phone, blog, twitter, linkedin])
+    db.exec_params(sql,[id, breakable, phone, blog, twitter, linkedin])
   end
 end
 
