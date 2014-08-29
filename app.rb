@@ -44,7 +44,7 @@ end
 
 configure :development do
   require 'pry'
-  set :port, 9000
+  set :port, 9001
   set :database_config, { dbname: 'sinatra_omniauth_dev' }
 end
 
