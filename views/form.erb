@@ -26,17 +26,13 @@
 
 <div class="panel callout radius">
   <form id="project" action="/profile/<%= current_user['id'] %>/projects" method="post">
-  <div class="row">
-    <div class="large-12 columns">
-      <div class="row collapse">
-        <div class="small-10 columns">
-          <input type="text" name="project" placeholder="Update Your Current Project">
-        </div>
-        <div class="small-2 columns">
-          <input class="button postfix" type="submit" value="Change">
-        </div>
+    <div class="row collapse">
+      <div class="small-10 columns">
+        <input type="text" name="project" placeholder="Update Your Current Project">
+      </div>
+      <div class="small-2 columns">
+        <input class="button postfix" type="submit" value="Change">
       </div>
     </div>
-  </div>
   </form>
 </div>

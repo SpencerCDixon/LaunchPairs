@@ -4,6 +4,8 @@ Dotenv.load
 
 require 'sinatra'
 require 'sinatra/flash'
+require 'sinatra/json'
+require 'sinatra/respond_with'
 require 'omniauth-github'
 require 'pg'
 require 'flowdock'
@@ -33,7 +35,6 @@ end
 
 def production_database_config
   db_url_parts = ENV['DATABASE_URL'].split(/\/|:|@/)
-
   {
     user: db_url_parts[3],
     password: db_url_parts[4],
@@ -44,7 +45,7 @@ end
 
 configure :development do
   require 'pry'
-  set :port, 9001
+  require 'sinatra/reloader'
   set :database_config, { dbname: 'sinatra_omniauth_dev' }
 end
 
@@ -96,11 +97,9 @@ end
 
 def find_user_by_id(id)
   sql = 'SELECT * FROM users WHERE id = $1 LIMIT 1'
-
   user = db_connection do |db|
     db.exec_params(sql, [id])
   end
-
   user.first
 end
 
@@ -407,14 +406,14 @@ end
 post '/profile/:user_id/projects' do
   authenticate!
   @users = all_users
-  if params[:project].include?("<") || params[:project].include?(">") || params[:project].include?(";")
-    flash[:notice] = "Stop trying to hack the site! ;)"
-    redirect back
-  else
-    project = params[:project]
+  project = params[:project]
+
+  update_project(session['user_id'], h(project))
+
+  respond_to do |format|
+    format.html { redirect to("/profile/#{params[:user_id]}") }
+    format.json { json project: project }
   end
-  update_project(session['user_id'],h(project))
-  redirect to("/profile/#{params[:user_id]}")
 end
 
 ####################
